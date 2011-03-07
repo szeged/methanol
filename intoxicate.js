@@ -24,15 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var methanol_ignition = new Date().getTime();
-
 if (window.addEventListener)
-    window.addEventListener("load", methanol_next, false);
+    window.addEventListener("load", top.methanol_next, false);
 else
-    window.attachEvent("onload", methanol_next);
-
-function methanol_next()
-{
-    top.window.methanol_next_iter(new Date().getTime() - methanol_ignition);
-}
-
+    window.attachEvent("onload", top.methanol_next);

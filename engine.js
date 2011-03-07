@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var methanol_id = "Methanol Benchmark (version: 1%)";
+var methanol_id = "Methanol Benchmark (version: 2%)";
 
 var methanol_i = 0;
 var methanol_n = methanol_tests.length;
@@ -32,19 +32,21 @@ var methanol_j = -1;
 var methanol_m;
 var methanol_skip;
 var methanol_results = new Array(methanol_n + 2);
+var methanol_builtin_ignition;
 
 if (typeof (methanol_override_number_of_skipped) != "undefined" &&  methanol_override_number_of_skipped >= 0)
     methanol_skip = methanol_override_number_of_skipped;
 else
-    methanol_skip = 3;
+    methanol_skip = 2;
 
 if (typeof (methanol_override_number_of_iteration) != "undefined" &&  methanol_override_number_of_iteration > 0)
     methanol_m = methanol_override_number_of_iteration;
 else
-    methanol_m = 10 + methanol_skip;
+    methanol_m = 10 + (methanol_skip << 1);
 
 function methanol_show_results()
 {
+
     var i, j, k;
     var s = 0;
     for (i = 0; i < methanol_n; ++i) {
@@ -56,9 +58,9 @@ function methanol_show_results()
                     methanol_results[i][j] = methanol_results[i][k];
                     methanol_results[i][k] = tmp;
                 }
-        for (j = methanol_skip; j < methanol_m; ++j)
+        for (j = methanol_skip; j < methanol_m - methanol_skip; ++j)
             sub += methanol_results[i][j];
-        sub = sub / (methanol_m - methanol_skip);
+        sub = sub / (methanol_m - (methanol_skip << 1));
         methanol_results[i][methanol_m] = sub
         s += sub;
     }
@@ -68,17 +70,17 @@ function methanol_show_results()
     for (i = 0; i < methanol_n; ++i) {
         var avg = methanol_results[i][methanol_m];
         var sub = 0;
-        for (j = methanol_skip; j < methanol_m; ++j) {
+        for (j = methanol_skip; j < methanol_m - methanol_skip; ++j) {
             var x = methanol_results[i][j] - avg;
             sub += x * x;
         }
-        methanol_results[i][methanol_m + 1] = 100 * Math.sqrt(sub / (methanol_m - methanol_skip)) / avg;
+        methanol_results[i][methanol_m + 1] = 100 * Math.sqrt(sub / (methanol_m - (methanol_skip << 1))) / avg;
         txt += methanol_tests[i] + ": " + avg + " (" + methanol_results[i][methanol_m + 1] + "%)\n<br />";
     }
     txt += "Summary: " + s + "\n<br />";
     txt += "</pre></body></html>";
 
-    window.frames[0].document.write(txt);
+    window.document.write(txt);
 }
 
 function methanol_next_iter(diff)
@@ -94,6 +96,8 @@ function methanol_next_iter(diff)
         return;
     }
 
+    methanol_builtin_ignition = new Date().getTime();
+
     var frame = document.getElementById("frame");
     frame.src = "";
     frame.src = methanol_tests[methanol_i];
@@ -104,6 +108,17 @@ function methanol_next_iter(diff)
         ++methanol_i;
         methanol_j = -1;
     }
+
+}
+
+function methanol_next()
+{
+    setTimeout(methanol_builtin_next_timeout,1);
+}
+
+function methanol_builtin_next_timeout()
+{
+    methanol_next_iter(new Date().getTime() - methanol_builtin_ignition);
 }
 
 // Do NOT try this at home!
@@ -115,6 +130,8 @@ function methanol_fire()
     methanol_total = 0;
     methanol_num = 0;
 
-    methanol_next_iter();
+    document.getElementById("console").innerHTML += " The lowest and higest "+ methanol_skip +" measurement(s) will be dropped from the total number of measurements: " + methanol_m + ". <br />";
+
+    methanol_next_iter(-13);
 }
 
