@@ -29,6 +29,9 @@ var methanol_tests = Array(
     "svg/pure/pointLight.svg",
     "svg/pure/spotLight.svg",
     "svg/pure/turbulence.svg",
+    "svg/combined/turbulenceBoxesBig.svg",
+    "svg/combined/turbulenceBoxesSmall.svg",
+    "svg/combined/fourboxes.svg",
     "svg/combined/sedkit.svg"
 );
 

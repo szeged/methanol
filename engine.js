@@ -130,7 +130,7 @@ function methanol_fire()
     methanol_total = 0;
     methanol_num = 0;
 
-    document.getElementById("console").innerHTML += " The lowest and higest "+ methanol_skip +" measurement(s) will be dropped from the total number of measurements: " + methanol_m + ". <br />";
+    //document.getElementById("console").innerHTML += " The lowest and higest "+ methanol_skip +" measurement(s) will be dropped from the total number of measurements: " + methanol_m + ". <br />";
 
     methanol_next_iter(-13);
 }
