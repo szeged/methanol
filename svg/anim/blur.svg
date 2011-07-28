@@ -1,0 +1,42 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="350" height="450" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+<defs>
+  <filter id="gaussian_blur">
+    <feGaussianBlur id="blur" in="SourceGraphic" stdDeviation="0" />
+  </filter>
+</defs>
+<image x="10" y="10" width="300" height="400" xlink:href="../dom.jpg" style="filter:url(#gaussian_blur)"/>
+
+<text id="txt" x="5" y="260" font-weight="bold" font-size="50" stroke="orange" fill="white" >0 fps</text>
+
+<script>
+<![CDATA[
+var blur = document.getElementById('blur');
+var stddev = blur.getAttribute('stdDeviation');
+
+var fps = document.getElementById('txt');
+
+var round = Math.round;
+var startDate = new Date();
+var frameCounter = 0;
+var animationCounter = 0;
+
+function anim() {
+    animationCounter++;
+    if (animationCounter > 40) {
+        top.methanol_next();
+        return;
+    }
+
+    blur.setAttribute('stdDeviation', stddev + animationCounter / 5);
+
+    fps.textContent = (round(animationCounter * 100000 / (new Date() - startDate)) / 100) + " fps";
+    setTimeout(anim,1);
+}
+
+setTimeout(anim,1);
+//]]>
+</script>
+
+</svg>

@@ -1,0 +1,66 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<rect x="0%" y="0%" width="100%" height="100%" fill="black" onclick="start()" />
+
+<defs>
+<filter id="light" filterUnits="userSpaceOnUse" x="120" y="50" width="200" height="200">
+    <feTurbulence primitiveUnits="objectBoundingBox" id="turb" seed="0" type="turbulence" baseFrequency="0.02" numOctaves="2" />
+    <feDiffuseLighting primitiveUnits="objectBoundingBox" id="diff" diffuseConstant="1" lighting-color="rgb(150,94,244)" surfaceScale="9" >
+           <feSpotLight x="100" y="100" z="50" pointsAtX="100" pointsAtY="100" pointsAtZ="0" limitingConeAngle="65"/>
+    </feDiffuseLighting>
+</filter>
+<filter id="shadow" x="0" y="0" width="120%" height="140%">
+    <feOffset in="SourceAlpha" dx="7" dy="7"/>
+    <feGaussianBlur stdDeviation="3" result="shadowRes"/>
+    <feComposite in="SourceGraphic" in2="shadowRes" operator="over"/>
+</filter>
+</defs>
+
+<rect x="0" y="0" width="300" height="300" filter="url(#light)"/>
+<text id="txt" x="0" y="120" font-weight="bold" font-size="50" stroke="orange" fill="white" filter="url(#shadow)">0 fps</text>
+
+<script>
+<![CDATA[
+var light_x_baseVal = document.getElementById('light').x.baseVal;
+var light_y_baseVal = document.getElementById('light').y.baseVal;
+var fps_x_baseVal_item0 = document.getElementById('txt').x.baseVal.getItem(0);
+var fps_y_baseVal_item0 = document.getElementById('txt').y.baseVal.getItem(0);
+var fps = document.getElementById('txt');
+
+var PIMult2 = Math.PI * 2
+var sin = Math.sin
+var cos = Math.cos
+var round = Math.round
+var step = PIMult2 / 360
+var max = PIMult2 - step
+var counter = 0
+
+var startDate = 0;
+var frameCounter = 0;
+
+function anim() {
+    if (frameCounter > 40) {
+        top.methanol_next();
+        return;
+    }
+    counter = (counter < max) ? (counter + step) : 0;
+    var x = 50 + (cos(counter) * 50);
+    var y = 50 + (sin(counter) * 50);
+    light_x_baseVal.value = x + 20;
+    light_y_baseVal.value = y + 20;
+    fps_x_baseVal_item0.value = x + 5;
+    fps_y_baseVal_item0.value = y + 130;
+
+    frameCounter++;
+    fps.textContent = "afps: " +(round(frameCounter * 100000 / (new Date() - startDate)) / 100);
+    setTimeout(anim,1);
+}
+
+startDate = new Date();
+setTimeout(anim,1);
+//]]>
+</script>
+
+</svg>

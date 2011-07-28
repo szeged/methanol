@@ -25,6 +25,7 @@
  */
 
 var methanol_tests = Array(
+    "svg/pure/blur.svg",
     "svg/pure/diffuseLight.svg",
     "svg/pure/pointLight.svg",
     "svg/pure/spotLight.svg",
@@ -32,7 +33,12 @@ var methanol_tests = Array(
     "svg/combined/turbulenceBoxesBig.svg",
     "svg/combined/turbulenceBoxesSmall.svg",
     "svg/combined/fourboxes.svg",
-    "svg/combined/sedkit.svg"
+    "svg/combined/sedkit.svg",
+    "svg/anim/blue.svg",
+    "svg/anim/blur.svg",
+    "svg/anim/earth.svg",
+    "svg/anim/spotlight.svg",
+    "svg/anim/svg.svg"
 );
 
 //var methanol_override_number_of_iteration = 10;

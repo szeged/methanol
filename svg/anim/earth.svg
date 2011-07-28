@@ -1,0 +1,62 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
+<svg width="100%" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<rect x="0%" y="0%" width="100%" height="100%" fill="black" />
+
+<defs>
+<filter id="filt" filterUnits="objectBoundingBox" x="0" y="0" width="100%" height="100%">
+    <feFlood result="blackScreen"/>
+    <feFlood flood-color="rgb(255,255,255)" result="whiteScreen"/>
+    <feTurbulence baseFrequency="0.03" numOctaves="2" seed="10" result="turbRes"/>
+    <feGaussianBlur stdDeviation="1" result="turbRes"/>
+    <feComposite in="turbRes" in2="blackScreen" operator="arithmetic" k1="1" result="alphaRes"/>
+    <feBlend in="alphaRes" in2="whiteScreen" mode="normal"/>
+    <feComponentTransfer result="surface">
+      <feFuncR type="table" tableValues="0     0.129 0.368 0.039 0.070 0.745 0.466 1"/>
+      <feFuncG type="table" tableValues="0.058 0.070 0.756 0.313 0.611 0.568 0.478 1"/>
+      <feFuncB type="table" tableValues="0.584 0.847 0.992 0.058 0.113 0.027 0.388 1"/>
+      <feFuncA type="discrete" tableValues="1 1"/>
+    </feComponentTransfer>
+</filter>
+</defs>
+
+<rect id="rect" x="0" y="0" width="200" height="200" filter="url(#filt)"/>
+
+<text id="txt" x="5" y="260" font-weight="bold" font-size="50" stroke="orange" fill="white" >0 fps</text>
+
+<script> 
+<![CDATA[
+var rect = document.getElementById('rect');
+var rect_y = document.getElementById('rect').y.baseVal;
+
+var fps = document.getElementById('txt');
+
+var PIMult2Div40 = Math.PI * 2 / 120;
+var round = Math.round;
+var sin = Math.sin;
+
+var startDate = new Date();
+var frameCounter = 0;
+var animationCounter = 0;
+
+function anim() {
+    animationCounter++;
+    if (animationCounter > 40) {
+        top.methanol_next();
+        return;
+    }
+
+    rect_y.value = -animationCounter;
+    rect.setAttribute("transform", "translate(0," + animationCounter + ")");
+
+    frameCounter++;
+    fps.textContent = (round(frameCounter * 100000 / (new Date() - startDate)) / 100) + " fps";
+    setTimeout(anim,1);
+}
+
+setTimeout(anim,1);
+//]]>
+</script>
+
+</svg>
