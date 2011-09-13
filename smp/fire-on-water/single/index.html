@@ -1,8 +1,11 @@
 <html>
 <head>
-<title>3D terrain demo (with antialias)</title>
+<title>Fire on water demo</title>
 </head>
 <body marginheight=0 marginwidth=0>
+<table width="100%" height="100%">
+<tr align="center">
+<td align="center">
 <table width=1024 border=0 cellpadding=0 cellspacing=0>
 <tr>
   <td width=1024 valign=top colspan=3>
@@ -10,8 +13,8 @@
   </td>
 </tr>
 <tr>
-  <td valign=ceneter align=center>
-  <a href="http://webkit.sed.hu"><img src="logo.gif" width=150 height=150 /></a>
+  <td valign=center align=center>
+  <a href="http://webkit.sed.hu"><img src="../logo.gif" width=150 height=150 /></a>
   </td>
   <td valign=top>
   <form id=form>
@@ -19,19 +22,16 @@
   </form>
   </td>
   <td width=120 valign=center align=left>
-  <div id=perc></div>
-  </td>
-</tr>
-<tr>
-  <td align=center colspan=3>
-  <small><a href="index.html">Disable antialias</a></small>
   </td>
 </tr>
 </table>
-<script>
-param_antialias = 4;
-param_percentCounter = 200;
+</td>
+</tr>
+</table>
+<script src="demo.js">
 </script>
-<script src="demo.js"></script>
+<script>
+methanolDemo();
+</script>
 </body>
 </html>

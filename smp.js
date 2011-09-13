@@ -25,8 +25,12 @@
  */
 
 var methanol_tests = Array(
-    "smp/3d-terrain-demo/index.html",
-    "smp/fire-on-water/index.html"
+    "smp/3d-terrain-demo/single/index.html",
+    "smp/3d-terrain-demo/worker/index.html",
+    "smp/fire-on-water/single/index.html",
+    "smp/fire-on-water/worker/index.html",
+    "smp/raytrace/single/index.html",
+    "smp/raytrace/worker/index.html"
 );
 
 //var methanol_override_number_of_iteration = 10;

@@ -121,124 +121,6 @@ function initFireBaseWithUint32()
 }
 
 
-//////////////////////
-// Original workers //
-//////////////////////
-
-function originalWorkersNext()
-{
-  // Clear screen
-  ctx.fillStyle = 'rgba(0,0,0,1)';
-  ctx.fillRect(0,0,width,height);
-
-  startDate = new Date();
-  redWorker.postMessage({cmd:11});
-}
-
-function originalWorkers()
-{
-  if (maxCount >= 0)
-    debug("A demo is still running. Please wait a bit!");
-
-  debug(" *** Original workers *** ");
-
-  /* Init */
-  commonInit();
-  var initArray = initFireBase();
-
-  maxCount = maxCountInit;
-  redWorker = new Worker("worker.js");
-  blueWorker = new Worker("worker.js");
-  timeArray = new Array(maxCount+1);
-
-  function messageHandler(e) {
-    var res = e.data.res;
-    switch(res) {
-    case -1: {
-        debug("ERROR: " + e.data.err);
-        break;
-      }
-    case 0: {
-        break;
-      }
-    case 1: {
-        if (e.data.worker == 0) {
-          blueWorker.postMessage({cmd:22});
-        } else {
-          var diff = new Date() - startDate;
-          timeArray[maxCount] = diff;
-          var n = timeArray.length;
-          debug("Draw time (" + (n - maxCount) + "/" + n + "): " + diff + " ms");
-
-          if (maxCount > 0)
-            setTimeout(originalWorkersNext, timeout);
-          else {
-            var sum = 0;
-            n = n - 1;
-            var i = n;
-            for(; i > 0; --i)
-              for(var j = i - 1; j >= 0; --j) {
-                if (timeArray[i] < timeArray[j]) {
-                  var tmp = timeArray[i];
-                  timeArray[i] = timeArray[j];
-                  timeArray[j] = tmp;
-                }
-              }
-            for(i = n; i >= 0; i--)
-              sum += timeArray[i];
-            var med;
-            if((n+1) % 2) {
-              med = timeArray[n >> 1];
-            } else {
-              med = (timeArray[(n >> 1)] + timeArray[(n >> 1)+1]) / 2;
-            }
-            debug("Draw time median: " + med + " ms  shortest: " + timeArray[0] + " ms  longest: " + timeArray[n] + " ms");
-            setTimeout(top.methanol_next,1);
-          }
-          --maxCount;
-        }
-        break;
-      }
-    case 10: {
-        var box = e.data.box;
-        var x = e.data.x;
-        var y = e.data.y;
-
-        blueWorker.postMessage({cmd:21, x:x, y:y, box:box});
-
-        ctx.putImageData(box, x - overscan, y);
-
-        break;
-      }
-    case 20: {
-        var box = e.data.box;
-        var x = e.data.x;
-        var y = e.data.y;
-
-        ctx.putImageData(box, x - overscan, y);
-
-        break;
-      }
-    }
-  }
-
-  redWorker.onmessage = messageHandler;
-  blueWorker.onmessage = messageHandler;
-
-  var redidata = ctx.createImageData(extraWidth, height >> 1);
-  var redbox = ctx.createImageData(extraWidth, 16);
-  var postMessageTime = new Date();
-  redWorker.postMessage({cmd:10, width:extraWidth, height:(height >> 1), init:initArray, idata:redidata, box:redbox, postMessageTime:postMessageTime});
-
-  var blueidata = ctx.createImageData(extraWidth, height >> 1);
-  var bluebox = ctx.createImageData(extraWidth, 16);
-  var postMessageTime = new Date();
-  blueWorker.postMessage({cmd:20, width:extraWidth, height:(height >> 1), idata:blueidata, box:bluebox, postMessageTime:postMessageTime});
-
-  setTimeout(originalWorkersNext, 1);
-}
-
-
 ////////////////////////////////
 // Single thread (no workers) //
 ////////////////////////////////
@@ -268,7 +150,7 @@ function singleThread()
 
 function fireSingleThread()
 {
-  /* Init */
+  // Init
   commonInit();
   var init = initFireBase();
 
@@ -500,7 +382,7 @@ function fireSingleThread()
         med = (timeArray[(n >> 1)] + timeArray[(n >> 1)+1]) / 2;
       }
       debug("Draw time median: " + med + " ms  shortest: " + timeArray[0] + " ms  longest: " + timeArray[n] + " ms");
-      setTimeout(originalWorkers,1);
+      setTimeout(top.methanol_next,1);
   }
   --maxCount;
 }
