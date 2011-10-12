@@ -101,6 +101,7 @@ function methanol_show_results()
     }
 
     var txt = "<html><body><pre>" + methanol_id + "\n<br />\n<br />";
+    var results = "";
     var avg_dev = 0;
     for (i = 0; i < methanol_n; ++i) {
         var avg = sub_avarages[i];
@@ -115,6 +116,7 @@ function methanol_show_results()
         avg_dev += dev;
 
         txt += methanol_tests[i] + ": " + avg + " (" + (100 * dev) + "%)\n<br />";
+        results += "&" + methanol_tests[i] + ";" + avg + ";" + dev;
     }
     avg_dev /= methanol_n;
 
@@ -122,6 +124,7 @@ function methanol_show_results()
     txt += "</pre></body></html>";
 
     document.write(txt);
+    window.location = 'results.html?' + results;
 }
 
 function methanol_next_iter()
