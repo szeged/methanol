@@ -190,9 +190,24 @@ function setOverrides(iterationsParam, skipParam)
     }
 }
 
-// Do NOT try this at home!
-function methanol_fire()
+function syncronisedStart()
 {
+    var date = new Date();
+    var minutes = date.getMinutes();
+    var seconds = date.getSeconds();
+
+    date.setMinutes(minutes + 1);
+    date.setSeconds(0);
+
+    var actTime = new Date();
+    var startTimeout = date.getTime() - actTime.getTime();
+
+    window.frames[0].document.write("Methanol is starting in " + startTimeout / 1000 + " secs<br/>");
+    var t = setTimeout("methanol_fire()", startTimeout);
+}
+
+function methanol_fire()
+{ 
     var iterations = getURLParam("iter");
     var skip = getURLParam("skipped");
     if (iterations !== undefined || skip !== undefined)
@@ -200,4 +215,13 @@ function methanol_fire()
 
     if (setup())
         methanol_next_iter();
+}
+
+function methanol_start()
+{
+    var syncStart = getURLParam("syncStart");
+    if (syncStart)
+        syncronisedStart();
+    else
+        methanol_fire();
 }
