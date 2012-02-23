@@ -124,7 +124,10 @@ function methanol_show_results()
     txt += "</pre></body></html>";
 
     document.write(txt);
-    window.location = 'results.html?' + results;
+    
+    var urlReport = getURLParam("reportToUrl");
+    if (urlReport)
+      window.location = 'results.html?' + results;
 }
 
 function methanol_next_iter()
@@ -203,10 +206,10 @@ function syncronisedStart()
     var startTimeout = date.getTime() - actTime.getTime();
 
     window.frames[0].document.write("Methanol is starting in " + startTimeout / 1000 + " secs<br/>");
-    var t = setTimeout("methanol_fire()", startTimeout);
+    var t = setTimeout("normalStart()", startTimeout);
 }
 
-function methanol_fire()
+function normalStart()
 { 
     var iterations = getURLParam("iter");
     var skip = getURLParam("skipped");
@@ -217,11 +220,11 @@ function methanol_fire()
         methanol_next_iter();
 }
 
-function methanol_start()
+function methanol_fire()
 {
     var syncStart = getURLParam("syncStart");
     if (syncStart)
         syncronisedStart();
     else
-        methanol_fire();
+        normalStart();
 }
