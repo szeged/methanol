@@ -1,1 +1,92 @@
-Methanol is a browser page load benchmark.
+Summary
+~~~~~~~
+
+Methanol is JavaScript based browser page load benchmark.
+
+
+File information
+~~~~~~~~~~~~~~~~
+
+README
+ - This file.
+
+VERSION
+ - Version information file.
+
+engine.js
+ - Contains the necessary JavaScript functions for Methanol.
+
+fire-smp.html
+ - Starts SMP benchmark suite.
+
+fire-svg.html
+ - Starts SVG benchmark suite.
+
+fire.html
+ - Starts standard benchmark suite. By default it uses pages defined in sample.js.
+
+intoxicate.js
+ - This file needs to be included into index.html of every test sites.
+ - <script src="PATH/intoxicate.js"></script>
+   - src have to point to intoxicate.js
+
+results.html
+ - Blank html page, it necessary when you require results into the url bar.
+
+sample/
+ - Sample directory of sites to be benchmarked.
+
+sample.js
+ - Sample js file that contains the references in an array to the sites.
+
+smp/
+ - Directory of SMP test pages.
+
+smp.js
+ - Contains the references to the SMP test pages.
+
+svg/
+ - Directory of SVG test pages.
+
+svg.js
+ - Contains the references to the SVG test pages.
+
+
+Behavior modifier options for the engine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+iter=NUMBER
+ - set Methanol how many times have to load each page
+ - default value: 10
+
+skipped=NUMBER
+ - set the number of dropped (warm up) iterations, these iterations won't be counted in results
+ - notice: the first run will fill caches with e.g. images, css, js
+ - default value: 2
+
+syncStart=1/0
+ - 1 = true, 0 = false
+ - provide a synchronized start for two or more simultaneously started Methanols
+ - notice: useful for benchmarking more simultaneously running Methanol in separate processes or in
+   separate browser-tabs, browser-windows
+ - default value: 0
+
+reportToUrl=1/0
+ - 1 = true, 0 = false
+ - report results into the url bar
+ - shows the results when Methanol finished and redirects the page to results.html and fill the
+   url bar with the results after results.html
+ - default value: 0
+
+Usage example:
+
+ - fire.html?iter=6&skipped=1&synchStart=0&reportToUrl=1
+
+
+Suggested usage with QtWebKit's QtTestBrowser or MiniBrowser
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Start the testbrowser with -print-loaded-urls option, when Methanol finished the running the
+results will be printed to the shell's standard output, so you can parse it for further utilization and
+automatization purposes.
+
