@@ -116,18 +116,25 @@ function methanol_show_results()
         avg_dev += dev;
 
         txt += methanol_tests[i] + ": " + avg + " (" + (100 * dev) + "%)\n<br />";
-        results += "&" + methanol_tests[i] + ";" + avg + ";" + dev;
+        results += "&" + methanol_tests[i] + "=" + avg + "," + dev;
     }
     avg_dev /= methanol_n;
 
     txt += "Summary: " + s + " (" + (100 * avg_dev) + "%)\n<br />"
     txt += "</pre></body></html>";
-
+    results += "&summary=" + s + "," + avg_dev;
     document.write(txt);
-    
+
+    //actually the best way is using post instead of get
     var urlReport = getURLParam("reportToUrl");
-    if (urlReport)
-      window.location = 'results.html?' + results;
+    if (urlReport){
+      urlReport = urlReport.replace("%3F",'?');
+      if (urlReport.indexOf('?') != -1){
+            window.location = urlReport + results;
+      }else{
+            window.location = urlReport + '?' + results;
+      }
+    }
 }
 
 function methanol_next_iter()
