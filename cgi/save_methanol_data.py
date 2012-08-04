@@ -50,7 +50,7 @@ print '''
     <tr>
          <th>test_case_id<th/>
          <th>average(ms)<th/>
-         <th>deviate average(ms)<th/>
+         <th>deviate average(%)<th/>
     <tr/>'''
 
 for key in f:
@@ -59,16 +59,16 @@ for key in f:
     key = key.strip()
     values = f.getvalue(key).split(',')
     average = values[0].strip()
-    average_deviate = values[1].strip()
+    average_deviate = float(values[1].strip()) * 100
     print '<tr>'
     print '<td align="left">%s<td/>' % key
     print '<td align="right">%s<td/>' % average
     print '<td align="right">%s<td/>' % average_deviate
     print '</tr>'
     if save_file:
-        result = {'test_case_id': key.strip(),
-                  'average': values[0].strip(),
-                  'average_deviate': values[1].strip()
+        result = {'test_case_id': key,
+                  'average': average,
+                  'average_deviate': average_deviate
                  }
         test_results.append(result)
 
