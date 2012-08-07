@@ -40,9 +40,23 @@ print '''<html>
 '''
 
 FLAG_SAVE_TO_FILE = 'save2file'
+#set the default directory to save the result file
+#when the passed save2file is a relative path(like just a name)
 SAVE_DIR = '/tmp/methanol'
+
 f = cgi.FieldStorage()
-save_file = f.getvalue(FLAG_SAVE_TO_FILE)
+save_file_path = f.getvalue(FLAG_SAVE_TO_FILE)
+
+# for windows, I think we can use like:
+#  if not save_file_path[0] == '/' and not save_file_path[1:3] == ':\\':
+# but because I don't have an windows environment,
+# so comment here for reference when necessary
+if not save_file_path[0] == '/' :
+    save_file_path=os.path.join(SAVE_DIR, save_file_path)
+
+SAVE_DIR = os.path.dirname(save_file_path)
+save_file = os.path.basename(save_file_path)
+
 test_results = []
 print '''
     <div align="center">
