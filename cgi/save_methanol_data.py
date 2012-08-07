@@ -52,11 +52,13 @@ save_file_path = f.getvalue(FLAG_SAVE_TO_FILE)
 #  if not save_file_path[0] == '/' and not save_file_path[1:3] == ':\\':
 # but because I don't have an windows environment,
 # so comment here for reference when necessary
-if not save_file_path[0] == '/' :
-    save_file_path=os.path.join(SAVE_DIR, save_file_path)
-
-SAVE_DIR = os.path.dirname(save_file_path)
-save_file = os.path.basename(save_file_path)
+if save_file_path:
+    if not save_file_path[0] == '/' :
+        save_file_path=os.path.join(SAVE_DIR, save_file_path)
+    SAVE_DIR = os.path.dirname(save_file_path)
+    save_file = os.path.basename(save_file_path)
+else:
+    save_file = None
 
 test_results = []
 print '''
