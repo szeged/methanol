@@ -13,11 +13,12 @@ HOW TO USE:
     2. make this script executable
         chmod +x /usr/lib/cgi-bin/save_methanol_data.py
     3. add the url of this script to the test url, like:
-        http://localhost/methanol/fire.html?reportToUrl=http://localhost/cgi-bin/save_methanol_data.py
+        http://localhost/methanol/fire.html?reportToUrl=/cgi-bin/save_methanol_data.py
 
        if want to save the result to a file, we can do like:
-        http://localhost/methanol/fire.html?reportToUrl=http://localhost/cgi-bin/save_methanol_data.py%3Fsave2file=res.json
+        http://localhost/methanol/fire.html?reportToUrl=/cgi-bin/save_methanol_data.py%3Fsave2file=res.json
        then when the test finished, there will be a file /tmp/methanol/res.json generated.
+       or you can specified the save2file with an absolute path.
 
 """
 import cgitb
