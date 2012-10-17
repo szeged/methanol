@@ -65,6 +65,13 @@ function setup()
         die("wrong arguments: iterations=" + methanol_m + " skipped=" + methanol_skip);
 
     methanol_m_with_skip = methanol_m + methanol_skip;
+
+    var frame = document.getElementById("frame");
+    if (frame.addEventListener)
+        frame.addEventListener("load", methanol_next, false);
+    else
+        frame.attachEvent("onload", methanol_next);
+
     return true;
 }
 
