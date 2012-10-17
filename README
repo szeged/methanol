@@ -25,11 +25,6 @@ fire-svg.html
 fire.html
  - Starts standard benchmark suite. By default it uses pages defined in sample.js.
 
-intoxicate.js
- - This file needs to be included into index.html of every test sites.
- - <script src="PATH/intoxicate.js"></script>
-   - src have to point to intoxicate.js
-
 results.html
  - Blank html page, it necessary when you require results into the url bar.
 
