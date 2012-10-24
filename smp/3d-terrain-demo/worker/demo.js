@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2010, 2011 University of Szeged
- * Copyright (C) 2010, 2011 Gabor Loki <loki@inf.u-szeged.hu>
+ * Copyright (C) 2010-2012 University of Szeged
+ * Copyright (C) 2010-2012 Gabor Loki <loki@inf.u-szeged.hu>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,12 +25,20 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+var methanol_frame_start;
+
 function nextParameters()
 {
     if (drawCount == 1) {
-      top.methanol_next();
+      var date = new Date().getTime();
+      var message = {
+        start: methanol_frame_start,
+        end:   date
+      };
+      window.parent.postMessage(JSON.stringify(message), "*");
       return;
     }
+
     startDemo();
 }
 
@@ -144,6 +152,7 @@ function startDemo()
 {
     if (isStarted)
         return;
+    methanol_frame_start = new Date().getTime();
     isStarted = true;
     percent = 0;
 

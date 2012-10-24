@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2011 University of Szeged
+ * Copyright (C) 2009-2012 University of Szeged
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var methanol_id = "Methanol Benchmark (version: 3%)";
+var methanol_id = "Methanol Benchmark (version: 4%)";
 
 var methanol_i = 0;
 var methanol_n = methanol_tests.length;
@@ -137,6 +137,18 @@ function methanol_show_results()
     }
 }
 
+if (window.addEventListener)
+    window.addEventListener("message", methanol_frame_message, false);
+else
+    window.attachEvent("message", methanol_frame_message);
+
+function methanol_frame_message(event)
+{
+  var message = JSON.parse(event.data);
+
+  methanol_builtin_next_timeout(message.start, message.end);
+}
+
 function methanol_next_iter()
 {
     if (methanol_j == 0)
@@ -149,14 +161,9 @@ function methanol_next_iter()
     frame.src = methanol_tests[methanol_i];
 }
 
-function methanol_next()
+function methanol_builtin_next_timeout(start, end)
 {
-    setTimeout(methanol_builtin_next_timeout, 1);
-}
-
-function methanol_builtin_next_timeout()
-{
-    methanol_results[methanol_i][methanol_j] = new Date().getTime() - methanol_builtin_ignition;;
+    methanol_results[methanol_i][methanol_j] = end - start;
     ++methanol_j;
     if (methanol_j == methanol_m_with_skip) {
         ++methanol_i;
@@ -217,7 +224,7 @@ function syncronisedStart()
 }
 
 function normalStart()
-{ 
+{
     var iterations = getURLParam("iter");
     var skip = getURLParam("skipped");
     if (iterations !== undefined || skip !== undefined)

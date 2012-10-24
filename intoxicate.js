@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2011 University of Szeged
+ * Copyright (C) 2009-2012 University of Szeged
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,7 +24,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+var methanol_frame_start = new Date().getTime();
+
+function methanol_frame_done()
+{
+	var date = new Date().getTime();
+	var message = {
+		start: methanol_frame_start,
+		end:   date
+	};
+	window.parent.postMessage(JSON.stringify(message), "*");
+}
+
 if (window.addEventListener)
-    window.addEventListener("load", top.methanol_next, false);
+    window.addEventListener("load", methanol_frame_done, false);
 else
-    window.attachEvent("onload", top.methanol_next);
+    window.attachEvent("onload", methanol_frame_done);

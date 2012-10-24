@@ -1,10 +1,34 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="650" height="750" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" onload="top.methanol_next()" >
+
+<svg width="650" height="750" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" onload="methanol_next()" >
+
+<script>
+<![CDATA[
+var methanol_frame_start = new Date().getTime();
+//]]>
+</script>
+
 <defs>
   <filter id="gaussian_blur">
     <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
   </filter>
 </defs>
 <image x="10" y="10" width="600" height="700" xlink:href="../dom.jpg" style="filter:url(#gaussian_blur)"/>
+
+<script>
+<![CDATA[
+function methanol_next()
+{
+  var date = new Date().getTime();
+  var message = {
+	start: methanol_frame_start,
+	end:   date
+  };
+  window.parent.postMessage(JSON.stringify(message), "*");
+  methanol_frame_start = new Date().getTime();
+}
+//]]>
+</script>
+
 </svg>

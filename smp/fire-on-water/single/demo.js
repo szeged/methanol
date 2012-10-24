@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2011 University of Szeged
- * Copyright (C) 2011 Gabor Loki <loki@inf.u-szeged.hu>
+ * Copyright (C) 2011-2012 University of Szeged
+ * Copyright (C) 2011-2012 Gabor Loki <loki@inf.u-szeged.hu>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,6 +24,8 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+var methanol_frame_start;
 
 var maxCountInit = 2;
 var timeout = 1;
@@ -382,13 +384,24 @@ function fireSingleThread()
         med = (timeArray[(n >> 1)] + timeArray[(n >> 1)+1]) / 2;
       }
       debug("Draw time median: " + med + " ms  shortest: " + timeArray[0] + " ms  longest: " + timeArray[n] + " ms");
-      setTimeout(top.methanol_next,1);
+      methanol_next();
   }
   --maxCount;
 }
 
-
 function methanolDemo()
 {
+  methanol_frame_start = new Date().getTime();
   singleThread();
+}
+
+function methanol_next()
+{
+  var date = new Date().getTime();
+  var message = {
+    start: methanol_frame_start,
+    end:   date
+  };
+  window.parent.postMessage(JSON.stringify(message), "*");
+  methanol_frame_start = new Date().getTime();
 }

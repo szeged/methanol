@@ -2,6 +2,7 @@
     <head> 
         <title>Oliver's JS Raytracer</title> 
         <script> 
+            var methanol_frame_start = new Date().getTime();
             var currCount = 0;
             var maxCount = 10;
             var noImageData = false;
@@ -120,13 +121,20 @@ if (!window.animate) {
     currCount++;
     if (currCount < maxCount)
       setTimeout(render,1);
-    else
-      setTimeout(top.methanol_next,1);
-    }  else {
-        angle+=0.1;
-        setTimeout(render, 10);
+    else {
+        var date = new Date().getTime();
+        var message = {
+          start: methanol_frame_start,
+          end:   date
+        };
+        window.parent.postMessage(JSON.stringify(message), "*");
+        methanol_frame_start = new Date().getTime();
     }
-        
+} else {
+    angle+=0.1;
+    setTimeout(render, 10);
+}
+
 };
 queue = (workerCount.value === lastWorkerCount && reuseWorkers) ? queue : new JobQueue(workerCount.value);
 lastWorkerCount = workerCount.value;

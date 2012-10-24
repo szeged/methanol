@@ -1,7 +1,13 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
-<svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg" onload="top.methanol_next()" >
+<svg width="400" height="400" version="1.1" xmlns="http://www.w3.org/2000/svg" onload="methanol_next()" >
+
+<script>
+<![CDATA[
+var methanol_frame_start = new Date().getTime();
+//]]>
+</script>
 
 <rect x="0%" y="0%" width="100%" height="100%" fill="black" />
 
@@ -75,5 +81,20 @@
    <rect x="300" y="300" width="100" height="100" />
 </g>
 
+
+<script>
+<![CDATA[
+function methanol_next()
+{
+  var date = new Date().getTime();
+  var message = {
+	start: methanol_frame_start,
+	end:   date
+  };
+  window.parent.postMessage(JSON.stringify(message), "*");
+  methanol_frame_start = new Date().getTime();
+}
+//]]>
+</script>
 
 </svg>
