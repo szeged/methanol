@@ -32,11 +32,12 @@ var methanol_results = new Array(methanol_n);
 var methanol_j = 0;
 var methanol_m;
 var methanol_skip;
-var methanol_builtin_ignition;
+//var methanol_builtin_ignition;
 var methanol_m_with_skip;
 var methanol_url_params;
 var methanol_override_number_of_iteration;
 var methanol_override_number_of_skipped;
+var methanol_benchmark_name;
 
 function die(msg)
 {
@@ -47,6 +48,10 @@ function die(msg)
 
 function setup()
 {
+    var turl = window.location.href;
+    var filestr = turl.substring(turl.lastIndexOf('/')+1);
+    methanol_benchmark_name = filestr.substring(0,filestr.indexOf('.'));
+
     if (methanol_override_number_of_skipped !== undefined)
         methanol_skip = methanol_override_number_of_skipped;
     else
@@ -66,6 +71,30 @@ function setup()
 
     methanol_m_with_skip = methanol_m + methanol_skip;
     return true;
+}
+
+function methanol_show_fps()
+{
+    var txt = "<html><body><pre>" + methanol_id + "\n<br />\n<br />";
+    var frame = document.getElementById("frame");
+    frame.src = "";
+    
+    for (var i = 0; i < methanol_n; i++) {
+        txt += methanol_tests[i] + ": " + methanol_results[i] + " FPS " + "\n<br />";
+    }
+    txt += "</pre></body></html>";
+    document.write(txt);
+
+    //actually the best way is using post instead of get
+    var urlReport = getURLParam("reportToUrl");
+    if (urlReport){
+      urlReport = urlReport.replace("%3F",'?');
+      if (urlReport.indexOf('?') != -1){
+            window.location = urlReport + results;
+      }else{
+            window.location = urlReport + '?' + results;
+      }
+    }
 }
 
 function methanol_show_results()
@@ -144,36 +173,47 @@ else
 
 function methanol_frame_message(event)
 {
-  var message = JSON.parse(event.data);
+  var data = JSON.parse(event.data);
 
-  methanol_builtin_next_timeout(message.start, message.end);
+  methanol_builtin_next_timeout(data);
 }
 
 function methanol_next_iter()
 {
-    if (methanol_j == 0)
+    if (methanol_j == 0 
+            && methanol_benchmark_name != "fire-webgl" 
+       	    && methanol_benchmark_name != "fire-canvas")
         methanol_results[methanol_i] = new Array(methanol_m_with_skip);
 
-    methanol_builtin_ignition = new Date().getTime();
+//    methanol_builtin_ignition = new Date().getTime();
 
     var frame = document.getElementById("frame");
     frame.src = "";
     frame.src = methanol_tests[methanol_i];
 }
 
-function methanol_builtin_next_timeout(start, end)
+function methanol_builtin_next_timeout(data)
 {
-    methanol_results[methanol_i][methanol_j] = end - start;
-    ++methanol_j;
-    if (methanol_j == methanol_m_with_skip) {
-        ++methanol_i;
-        methanol_j = 0;
+    if (methanol_benchmark_name == "fire-webgl" 
+            || methanol_benchmark_name == "fire-canvas") {
+        methanol_results[methanol_i] = data;
+        methanol_i++;
+        if (methanol_i == methanol_n) {
+            methanol_show_fps();
+            return;
+        }
+    } else {
+        methanol_results[methanol_i][methanol_j] = data;
+        ++methanol_j;
+        if (methanol_j == methanol_m_with_skip) {
+            ++methanol_i;
+            methanol_j = 0;
+        }
+        if (methanol_i == methanol_n) {
+            methanol_show_results();
+            return;
+        }
     }
-    if (methanol_i == methanol_n) {
-        methanol_show_results();
-        return;
-    }
-
     methanol_next_iter();
 }
 

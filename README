@@ -26,8 +26,14 @@ fire.html
  - Starts standard benchmark suite. By default it uses pages defined in sample.js.
 
 intoxicate.js
- - This file needs to be included into index.html of every test sites.
+ - This file needs to be included into index.html of every test sites (except canvas).
  - <script src="PATH/intoxicate.js"></script>
+   - src have to point to intoxicate.js
+
+intoxicate-fps.js
+ - Desc: collect fps from canvas engine.
+ - This file needs to be included into index.html of canvas test sites.
+ - <script src="PATH/intoxicate-fps.js"></script>
    - src have to point to intoxicate.js
 
 results.html
@@ -50,7 +56,6 @@ svg/
 
 svg.js
  - Contains the references to the SVG test pages.
-
 
 Behavior modifier options for the engine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
