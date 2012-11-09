@@ -26,10 +26,10 @@
 
 function methanol_fps_done()
 {
-    var fpsSum = 0;
-    var fpsCount = 0;
-    var fpsAvg = 0;
-    var fpsTmp = 0;
+    var fpsSum = 0,
+        fpsCount = 0,
+        fpsAvg = 0,
+        fpsTmp = 0;
 
     for (var i = 0; i < 10; i++) {
         fpsTmp = parseFloat(uploadfr[i]);
@@ -38,9 +38,15 @@ function methanol_fps_done()
 	    fpsCount++;
 	}	
     }
-    if (fpsCount != 0)
-	fpsAvg = fpsSum / fpsCount;
-    window.parent.postMessage(JSON.stringify(fpsAvg.toFixed(2)), "*");
+    if (fpsCount != 0) {
+	fpsAvg = (fpsSum / fpsCount).toFixed(2);
+    }
+
+    var message = {
+            start: 0,
+            end:   fpsAvg
+        };
+    window.parent.postMessage(JSON.stringify(message), "*");
 }
 
 function methanol_frame_done()

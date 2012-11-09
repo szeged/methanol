@@ -32,7 +32,6 @@ var methanol_results = new Array(methanol_n);
 var methanol_j = 0;
 var methanol_m;
 var methanol_skip;
-//var methanol_builtin_ignition;
 var methanol_m_with_skip;
 var methanol_url_params;
 var methanol_override_number_of_iteration;
@@ -173,37 +172,33 @@ else
 
 function methanol_frame_message(event)
 {
-  var data = JSON.parse(event.data);
+    var message = JSON.parse(event.data);
 
-  methanol_builtin_next_timeout(data);
+    methanol_builtin_next_timeout(message.start, message.end);
 }
 
 function methanol_next_iter()
 {
-    if (methanol_j == 0 
-            && methanol_benchmark_name != "fire-webgl" 
-       	    && methanol_benchmark_name != "fire-canvas")
+    if (methanol_j == 0 && methanol_benchmark_name != "fire-canvas")
         methanol_results[methanol_i] = new Array(methanol_m_with_skip);
-
-//    methanol_builtin_ignition = new Date().getTime();
 
     var frame = document.getElementById("frame");
     frame.src = "";
     frame.src = methanol_tests[methanol_i];
 }
 
-function methanol_builtin_next_timeout(data)
+function methanol_builtin_next_timeout(start, end)
 {
-    if (methanol_benchmark_name == "fire-webgl" 
-            || methanol_benchmark_name == "fire-canvas") {
-        methanol_results[methanol_i] = data;
+    var rst = end - start;
+    if ( methanol_benchmark_name == "fire-canvas") {
+        methanol_results[methanol_i] = rst;
         methanol_i++;
         if (methanol_i == methanol_n) {
             methanol_show_fps();
             return;
         }
     } else {
-        methanol_results[methanol_i][methanol_j] = data;
+        methanol_results[methanol_i][methanol_j] = rst;
         ++methanol_j;
         if (methanol_j == methanol_m_with_skip) {
             ++methanol_i;

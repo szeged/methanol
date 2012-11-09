@@ -25,8 +25,8 @@
  */
 
 var methanol_tests = Array(
-	"canvas/feature_based/canvas_draw_arc.html",
-	"canvas/feature_based/canvas_draw_bezier.html",
-	"canvas/feature_based/canvas_draw_line.html"
+    "canvas/feature_based/canvas_draw_arc.html",
+    "canvas/feature_based/canvas_draw_bezier.html",
+    "canvas/feature_based/canvas_draw_line.html"
 );
 

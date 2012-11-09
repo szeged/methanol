@@ -29,8 +29,11 @@ var methanol_frame_start = new Date().getTime();
 function methanol_frame_done()
 {
     var date = new Date().getTime();
-    var data = date - methanol_frame_start;
-    window.parent.postMessage(JSON.stringify(data), "*");
+    var message = {
+        start: methanol_frame_start,
+	end:   date
+    };
+    window.parent.postMessage(JSON.stringify(message), "*");
 }
 
 if (window.addEventListener)
