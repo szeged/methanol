@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2012 University of Szeged
+ * Copyright (C) 2012 ARM Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,19 +24,41 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var methanol_frame_start = new Date().getTime();
+function methanol_fps_done()
+{
+    var fpsSum = 0,
+        fpsCount = 0,
+        fpsAvg = 0,
+        fpsTmp = 0;
+
+    for (var i = 0; i < 10; i++) {
+        fpsTmp = parseFloat(uploadfr[i]);
+	if ( fpsTmp > 0.1) {
+	    fpsSum += fpsTmp;
+	    fpsCount++;
+	}	
+    }
+    if (fpsCount != 0) {
+	fpsAvg = (fpsSum / fpsCount).toFixed(2);
+    }
+
+    var message = {
+            start: 0,
+            end:   fpsAvg
+        };
+    window.parent.postMessage(JSON.stringify(message), "*");
+}
 
 function methanol_frame_done()
 {
-    var date = new Date().getTime();
-    var message = {
-        start: methanol_frame_start,
-	end:   date
-    };
-    window.parent.postMessage(JSON.stringify(message), "*");
+    setTimeout(methanol_fps_done, 15000);
 }
 
 if (window.addEventListener)
     window.addEventListener("load", methanol_frame_done, false);
 else
     window.attachEvent("onload", methanol_frame_done);
+
+
+
+	

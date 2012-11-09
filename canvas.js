@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2012 University of Szeged
+ * Copyright (C) 2012 ARM Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -11,7 +11,7 @@
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY UNIVERSITY OF SZEGED ``AS IS'' AND ANY
+ * THIS SOFTWARE IS PROVIDED BY ARM Inc. ``AS IS'' AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL UNIVERSITY OF SZEGED OR
@@ -24,19 +24,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var methanol_frame_start = new Date().getTime();
+var methanol_tests = Array(
+    "canvas/feature_based/canvas_draw_arc.html",
+    "canvas/feature_based/canvas_draw_bezier.html",
+    "canvas/feature_based/canvas_draw_line.html"
+);
 
-function methanol_frame_done()
-{
-    var date = new Date().getTime();
-    var message = {
-        start: methanol_frame_start,
-	end:   date
-    };
-    window.parent.postMessage(JSON.stringify(message), "*");
-}
-
-if (window.addEventListener)
-    window.addEventListener("load", methanol_frame_done, false);
-else
-    window.attachEvent("onload", methanol_frame_done);

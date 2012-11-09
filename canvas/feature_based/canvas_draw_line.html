@@ -1,0 +1,91 @@
+<!--
+ Copyright (C) 2012 ARM Inc.
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY UNIVERSITY OF SZEGED ``AS IS'' AND ANY
+ EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL UNIVERSITY OF SZEGED OR
+ CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<!DOCTYPE html>
+<script src="../../intoxicate-fps.js"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>canvas drawline</title>
+    <script type="text/javascript" src="../engines/utils.js"></script>
+    <script>
+        var uploadfr = 0; 
+        var g_fpsCounter = null;
+
+        function draw(ctx) {
+            var x = 0,
+                y = 0;
+            for (var i = 0; i < 100; i++) {
+                x = getRandom(800);
+                y = getRandom(600);
+                if (i % 2 == 0) {
+                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                    ctx.lineWidth = 4;
+                    ctx.lineJoin = 'miter';
+                } else if (i % 3 == 0) {
+                    ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
+                    ctx.lineWidth = 8;
+                    ctx.lineJoin = 'round';
+                } else {
+                    ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
+                    ctx.lineWidth = 16;
+                    ctx.lineJoin = 'bevel';
+                }
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + 80, y + 60);
+                ctx.lineTo(x, y + 120);
+                ctx.lineTo(x, y);
+                ctx.closePath();
+                ctx.stroke();
+            }
+        }
+
+        function start() {
+            var canvas = document.getElementsByTagName('canvas')[0],
+                ctx = null,
+                body = document.getElementsByTagName('body')[0];
+
+            if (canvas.getContext('2d')) {
+                ctx = canvas.getContext('2d');
+                g_fpsCounter = new FPSUtil();
+                ctx.fillStyle = "#EEEEFF";
+                ctx.fillRect(0, 0, 800, 600);
+                var f = function () {
+                        requestid = window.requestAnimFrame(f, canvas);
+                        draw(ctx);
+                        g_fpsCounter.update();
+                        uploadfr = g_fpsCounter.getFPS();
+                    };
+                f();
+            }
+        }
+    </script>
+</head>
+<body onload="start();">
+    <canvas id="canvas" width="800" height="600" />
+</body>
+
+</html>

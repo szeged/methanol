@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2012 University of Szeged
+ * Copyright (C) 2012 ARM Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,19 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var methanol_frame_start = new Date().getTime();
+var methanol_tests = Array(
+/*
+ * feature based benchmarks.
+ */
+    "css/feature_based/css_border_image.html",
+    "css/feature_based/css_border_radius.html",
+    "css/feature_based/css_box_shadow.html",
+/*
+ * CSS filters benchmarks.
+ */
+    "css/css_filters/css_filter_dropshadow.html",
+    "css/css_filters/css_filter_blur.html",
+    "css/css_filters/css_filter_brightness.html"
+);
 
-function methanol_frame_done()
-{
-    var date = new Date().getTime();
-    var message = {
-        start: methanol_frame_start,
-	end:   date
-    };
-    window.parent.postMessage(JSON.stringify(message), "*");
-}
-
-if (window.addEventListener)
-    window.addEventListener("load", methanol_frame_done, false);
-else
-    window.attachEvent("onload", methanol_frame_done);
