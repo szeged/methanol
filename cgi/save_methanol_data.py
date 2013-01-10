@@ -53,8 +53,8 @@ save_file_path = f.getvalue(FLAG_SAVE_TO_FILE)
 # but because I don't have an windows environment,
 # so comment here for reference when necessary
 if save_file_path:
-    if not save_file_path[0] == '/' :
-        save_file_path=os.path.join(SAVE_DIR, save_file_path)
+    if not save_file_path[0] == '/':
+        save_file_path = os.path.join(SAVE_DIR, save_file_path)
     SAVE_DIR = os.path.dirname(save_file_path)
     save_file = os.path.basename(save_file_path)
 else:
@@ -64,29 +64,53 @@ test_results = []
 print '''
     <div align="center">
     <table border="1" style="border:solid;background:#CFCFCF;">
+    '''
+if f.getvalue('units'):
+    print '''
+    <tr>
+         <th>test_case_id<th/>
+         <th>value<th/>
+         <th>units<th/>
+    <tr/>
+    '''
+else:
+    print '''
     <tr>
          <th>test_case_id<th/>
          <th>average(ms)<th/>
          <th>deviate average(%)<th/>
-    <tr/>'''
+    <tr/>
+    '''
 
 for key in f:
-    if key == FLAG_SAVE_TO_FILE:
+    if key == FLAG_SAVE_TO_FILE or key == 'units':
         continue
     key = key.strip()
     values = f.getvalue(key).split(',')
     average = values[0].strip()
-    average_deviate = float(values[1].strip()) * 100
+    units = None
+    average_deviate = None
+    try:
+        average_deviate = float(values[1].strip()) * 100
+    except ValueError:
+        units = values[1].strip()
     print '<tr>'
     print '<td align="left">%s<td/>' % key
     print '<td align="right">%s<td/>' % average
-    print '<td align="right">%s<td/>' % average_deviate
+    if average_deviate:
+        print '<td align="right">%s<td/>' % average_deviate
+    if units:
+        print '<td align="right">%s<td/>' % units
     print '</tr>'
     if save_file:
         result = {'test_case_id': key,
                   'average': average,
-                  'average_deviate': average_deviate
                  }
+        if average_deviate:
+            result["average_deviate"] = average_deviate
+        if units:
+            result["units"] = units
+
         test_results.append(result)
 
 print '</table></div></body></html>'

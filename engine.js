@@ -47,7 +47,7 @@ function die(msg)
 
 function setup()
 {
-    var turl = window.location.href;
+    var turl = window.location.pathname;
     var filestr = turl.substring(turl.lastIndexOf('/')+1);
     methanol_benchmark_name = filestr.substring(0,filestr.indexOf('.'));
 
@@ -77,9 +77,11 @@ function methanol_show_fps()
     var txt = "<html><body><pre>" + methanol_id + "\n<br />\n<br />";
     var frame = document.getElementById("frame");
     frame.src = "";
-    
+
+    var results = "";
     for (var i = 0; i < methanol_n; i++) {
         txt += methanol_tests[i] + ": " + methanol_results[i] + " FPS " + "\n<br />";
+        results += "&" + methanol_tests[i] + "=" + methanol_results[i] + ",FPS";
     }
     txt += "</pre></body></html>";
     document.write(txt);
@@ -87,6 +89,7 @@ function methanol_show_fps()
     //actually the best way is using post instead of get
     var urlReport = getURLParam("reportToUrl");
     if (urlReport){
+      results = results + "&units=true"
       urlReport = urlReport.replace("%3F",'?');
       if (urlReport.indexOf('?') != -1){
             window.location = urlReport + results;
