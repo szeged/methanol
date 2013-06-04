@@ -36,7 +36,6 @@ var methanol_m_with_skip;
 var methanol_url_params;
 var methanol_override_number_of_iteration;
 var methanol_override_number_of_skipped;
-var methanol_benchmark_name;
 
 function die(msg)
 {
@@ -47,10 +46,6 @@ function die(msg)
 
 function setup()
 {
-    var turl = window.location.pathname;
-    var filestr = turl.substring(turl.lastIndexOf('/')+1);
-    methanol_benchmark_name = filestr.substring(0,filestr.indexOf('.'));
-
     if (methanol_override_number_of_skipped !== undefined)
         methanol_skip = methanol_override_number_of_skipped;
     else
@@ -72,33 +67,6 @@ function setup()
     return true;
 }
 
-function methanol_show_fps()
-{
-    var txt = "<html><body><pre>" + methanol_id + "\n<br />\n<br />";
-    var frame = document.getElementById("frame");
-    frame.src = "";
-
-    var results = "";
-    for (var i = 0; i < methanol_n; i++) {
-        txt += methanol_tests[i] + ": " + methanol_results[i] + " FPS " + "\n<br />";
-        results += "&" + methanol_tests[i] + "=" + methanol_results[i] + ",FPS";
-    }
-    txt += "</pre></body></html>";
-    document.write(txt);
-
-    //actually the best way is using post instead of get
-    var urlReport = getURLParam("reportToUrl");
-    if (urlReport){
-      results = results + "&units=true"
-      urlReport = urlReport.replace("%3F",'?');
-      if (urlReport.indexOf('?') != -1){
-            window.location = urlReport + results;
-      }else{
-            window.location = urlReport + '?' + results;
-      }
-    }
-}
-
 function methanol_show_results()
 {
     var frame = document.getElementById("frame");
@@ -112,15 +80,7 @@ function methanol_show_results()
 
     for (i = 0; i < methanol_n; ++i) {
         // Order the current line of results.
-        for (j = 0; j < methanol_m_with_skip - 1; ++j) {
-            for (k = j + 1; k < methanol_m_with_skip; ++k) {
-                if (methanol_results[i][j] < methanol_results[i][k]) {
-                    var tmp = methanol_results[i][j];
-                    methanol_results[i][j] = methanol_results[i][k];
-                    methanol_results[i][k] = tmp;
-                }
-            }
-        }
+        methanol_results[i].sort();
 
         // Compute avarage.
         var avg = 0;
@@ -146,14 +106,14 @@ function methanol_show_results()
         var dev = Math.sqrt(sub_dev_sum / methanol_m) / avg;
         avg_dev += dev;
 
-        txt += methanol_tests[i] + ": " + avg + " (" + (100 * dev) + "%)\n<br />";
-        results += "&" + methanol_tests[i] + "=" + avg + "," + dev;
+        txt += methanol_tests[i] + ": " + avg.toFixed(2) + " (" + (100 * dev).toFixed(2) + "%)\n<br />";
+        results += "&" + methanol_tests[i] + "=" + avg.toFixed(2) + "," + dev.toFixed(4);
     }
     avg_dev /= methanol_n;
 
-    txt += "Summary: " + s + " (" + (100 * avg_dev) + "%)\n<br />"
+    txt += "Summary: " + s.toFixed(2) + " (" + (100 * avg_dev).toFixed(2) + "%)\n<br />"
     txt += "</pre></body></html>";
-    results += "&summary=" + s + "," + avg_dev;
+    results += "&summary=" + s.toFixed(2) + "," + avg_dev.toFixed(4);
     document.write(txt);
 
     //actually the best way is using post instead of get
@@ -182,7 +142,7 @@ function methanol_frame_message(event)
 
 function methanol_next_iter()
 {
-    if (methanol_j == 0 && methanol_benchmark_name != "fire-canvas")
+    if (methanol_j == 0)
         methanol_results[methanol_i] = new Array(methanol_m_with_skip);
 
     var frame = document.getElementById("frame");
@@ -193,24 +153,15 @@ function methanol_next_iter()
 function methanol_builtin_next_timeout(start, end)
 {
     var rst = end - start;
-    if ( methanol_benchmark_name == "fire-canvas") {
-        methanol_results[methanol_i] = rst;
-        methanol_i++;
-        if (methanol_i == methanol_n) {
-            methanol_show_fps();
-            return;
-        }
-    } else {
-        methanol_results[methanol_i][methanol_j] = rst;
-        ++methanol_j;
-        if (methanol_j == methanol_m_with_skip) {
-            ++methanol_i;
-            methanol_j = 0;
-        }
-        if (methanol_i == methanol_n) {
-            methanol_show_results();
-            return;
-        }
+    methanol_results[methanol_i][methanol_j] = rst;
+    ++methanol_j;
+    if (methanol_j == methanol_m_with_skip) {
+        ++methanol_i;
+        methanol_j = 0;
+    }
+    if (methanol_i == methanol_n) {
+        methanol_show_results();
+        return;
     }
     methanol_next_iter();
 }

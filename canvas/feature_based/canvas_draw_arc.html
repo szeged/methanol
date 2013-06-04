@@ -25,24 +25,20 @@
 -->
 
 <!DOCTYPE html>
-<script src="../../intoxicate-fps.js"></script>
 <head>
     <meta charset="UTF-8">
     <title>canvas drawarc</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
-        var uploadfr = 0; 
-        var g_fpsCounter = null;
-
-        function draw(ctx) {
+        function redraw(ctx) {
             var x = 0,
-                y = 0;
-		angle = 0;
+                y = 0,
+                angle = 0;
             for (var i = 0; i < 300; i++) {
                 x = getRandom(800);
                 y = getRandom(600);
-		angle = getRandom(Math.PI * 2.0);
-		
+                angle = getRandom(Math.PI * 2.0);
+
                 if (i % 2 == 0) {
                     ctx.fillStyle = 'rgba(255, 0, 0, 0.25)';
                 } else if (i % 3 == 0) {
@@ -58,30 +54,9 @@
             }
         }
 
-        function start() {
-            var canvas = document.getElementsByTagName('canvas')[0],
-                ctx = null,
-                body = document.getElementsByTagName('body')[0];
-
-            if (canvas.getContext('2d')) {
-                ctx = canvas.getContext('2d');
-                g_fpsCounter = new FPSUtil();
-
-                ctx.fillStyle = "#EEEEFF";
-                ctx.fillRect(0, 0, 800, 600);
-                var f = function () {
-                        requestid = window.requestAnimFrame(f, canvas);
-                        draw(ctx);
-                        g_fpsCounter.update();
-                        uploadfr = g_fpsCounter.getFPS();
-                    };
-                f();
-            }
-        }
+        var test = new MethanolCanvas2DTest(redraw);
     </script>
 </head>
-<body onload="start();">
-    <canvas id="canvas" width="800" height="600" />
+<body>
 </body>
-
 </html>

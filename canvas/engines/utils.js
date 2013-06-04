@@ -24,18 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-window.requestAnimFrame = (function() {
+window.requestAnimFrame = (function () {
     return window.requestAnimationFrame ||
            window.webkitRequestAnimationFrame ||
            window.mozRequestAnimationFrame ||
            window.oRequestAnimationFrame ||
            window.msRequestAnimationFrame ||
-           function( callback, element) {
-               return window.setTimeout(callback, 1000/60);
-        };
+           function (callback, element) {
+               return window.setTimeout(callback, 1000 / 60);
+           };
 })();
 
-window.cancelRequestAnimFrame = (function() {
+window.cancelRequestAnimFrame = (function () {
     return window.cancelCancelRequestAnimationFrame ||
            window.webkitCancelRequestAnimationFrame ||
            window.mozCancelRequestAnimationFrame ||
@@ -44,48 +44,48 @@ window.cancelRequestAnimFrame = (function() {
            window.clearTimeout;
 })();
 
-function getRandom (min, max)
-{ 
-    switch(arguments.length){ 
-        case 1: return parseInt(Math.random()*min+1); 
-        case 2: return parseInt(Math.random()*(max-min+1) + min); 
-        default: return 0; 
-	}
-}  
-
-function FPSUtil() {
-    this.start = new Date();
-    this.samples = 50;
-    this.curSample = 0;
-    this.curFPS = 0;
-    this.fpsArray = new Array(10);
-    this.curElement = 0;
-    for (var i = 0; i < 10; i++)
-        this.fpsArray[i] = 0;
-}
-
-FPSUtil.prototype.update = function() {
-    if (++this.curSample >= this.samples) {
-        var curTime = new Date();
-        var startTime = this.start;
-        var costTime = curTime.getTime() - startTime.getTime();
-        this.curFPS = (1000.0 * this.samples / costTime);
-        this.curSample = 0;
-        this.start = curTime;
-	this.fpsArray[this.curElement] = this.curFPS;
-	this.curElement = (++this.curElement) % 10;
-        return true;
+function getRandom(min, max) {
+    switch (arguments.length) {
+        case 1: return parseInt(Math.random() * min + 1);
+        case 2: return parseInt(Math.random() * (max - min + 1) + min);
+        default: return 0;
     }
-    return false;
-};
-
-FPSUtil.prototype.getFPS = function() {
-    return this.fpsArray;
-};
-
-FPSUtil.prototype.reset = function() {
-    this.curSample = 0;
-    this.curFPS = 0;
 }
 
+function MethanolCanvas2DTest(redraw) {
+    var frameCount = 0;
+    var startTime = Date.now();
+    var ctx;
+    var drawCtx = redraw;
+
+    function animationFrameCallback() {
+        frameCount++;
+        if (frameCount > 50) {
+            var message = {
+                start: startTime,
+                end: Date.now(),
+            };
+            window.parent.postMessage(JSON.stringify(message), "*");
+            return;
+        }
+        drawCtx(ctx);
+        window.requestAnimFrame(animationFrameCallback);
+    }
+
+    function startCanvasAnimation() {
+        document.body.innerHTML = '<canvas id="canvas" width="800" height="600" />';
+        var canvas = document.getElementById('canvas');
+        ctx = canvas.getContext('2d');
+        window.requestAnimFrame(animationFrameCallback);
+    }
+
+    function init() {
+        if (window.addEventListener)
+            window.addEventListener("load", startCanvasAnimation, false);
+        else
+            window.attachEvent("onload", startCanvasAnimation);
+    }
+
+    init();
+}
 
