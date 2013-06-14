@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009-2012 University of Szeged
+ * Copyright (C) 2009-2013 University of Szeged
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,47 +24,62 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var methanol_id = "Methanol Benchmark (version: 4%)";
+/// class MethanolParameter
+///   used to store global settings
+function MethanolParameter() {
+    // debug method
+    // add breakpoint here to debug private variables
+    this.debug = function () {
+        return;
+    }
+    // public variables
+    this.id = "Methanol Benchmark (version: 5%)";
+    this.skipped = 2;
+    this.iter = 10;
+    this.iter_with_skipped = this.skipped + this.iter;
+    this.syncStart = false;
+    this.reportToUrl = "";
+
+    // private variables
+    // alias for this
+    var _this = this;
+
+    // public methods
+    this.setByUrl = function (url) {
+        url.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+            function (m, key, value) {
+                _this[key] = value;
+            });
+        this.ensureParams();
+    };
+    this.ensureParams = function () {
+        this.skipped = parseInt(this.skipped);
+        this.skipped += this.skipped % 2;
+        this.iter = parseInt(this.iter);
+        this.iter = Math.max(this.iter, 1);
+        this.iter_with_skipped = this.skipped + this.iter;
+        this.syncStart = this.syncStart == "true" || this.syncStart == "1" ? true : false;
+    };
+
+    // construct
+}
+
+// TODO:
+// we might need a class to holds the engine
+// param should be its member variable
+var param;
+
 
 var methanol_i = 0;
+var methanol_j = 0;
 var methanol_n = methanol_tests.length;
 var methanol_results = new Array(methanol_n);
-var methanol_j = 0;
-var methanol_m;
-var methanol_skip;
-var methanol_m_with_skip;
-var methanol_url_params;
-var methanol_override_number_of_iteration;
-var methanol_override_number_of_skipped;
 
 function die(msg)
 {
     window.alert("FATAL ERROR: " + msg);
     window.close();
     return false;
-}
-
-function setup()
-{
-    if (methanol_override_number_of_skipped !== undefined)
-        methanol_skip = methanol_override_number_of_skipped;
-    else
-        methanol_skip = 2;
-
-    if (methanol_override_number_of_iteration !== undefined)
-        methanol_m = methanol_override_number_of_iteration;
-    else
-        methanol_m = 10;
-
-    // Sanity check.
-    if (methanol_skip >= methanol_m ||
-        (methanol_skip % 2) != 0 ||
-        methanol_m <= 0 ||
-        methanol_skip < 0)
-        die("wrong arguments: iterations=" + methanol_m + " skipped=" + methanol_skip);
-
-    methanol_m_with_skip = methanol_m + methanol_skip;
-    return true;
 }
 
 function methanol_show_results()
@@ -75,8 +90,8 @@ function methanol_show_results()
     var i, j, k;
     var s = 0;
     var sub_avarages = new Array(methanol_n);
-    var first_nonskipped_index = methanol_skip / 2;
-    var last_nonskipped_index = methanol_m_with_skip - 1 - (methanol_skip / 2);
+    var first_nonskipped_index = param.skipped / 2;
+    var last_nonskipped_index = param.iter_with_skipped - 1 - (param.skipped / 2);
 
     for (i = 0; i < methanol_n; ++i) {
         // Order the current line of results.
@@ -86,12 +101,12 @@ function methanol_show_results()
         var avg = 0;
         for (j = first_nonskipped_index; j <= last_nonskipped_index; ++j)
             avg += methanol_results[i][j];
-        avg = avg / methanol_m;
+        avg = avg / param.iter;
         sub_avarages[i] = avg;
         s += avg;
     }
 
-    var txt = "<html><body><pre>" + methanol_id + "\n<br />\n<br />";
+    var txt = "<html><body><pre>" + param.id + "\n<br />\n<br />";
     var results = "";
     var avg_dev = 0;
     for (i = 0; i < methanol_n; ++i) {
@@ -103,7 +118,7 @@ function methanol_show_results()
             sub_dev_sum += x * x;
         }
 
-        var dev = Math.sqrt(sub_dev_sum / methanol_m) / avg;
+        var dev = Math.sqrt(sub_dev_sum / param.iter) / avg;
         avg_dev += dev;
 
         txt += methanol_tests[i] + ": " + avg.toFixed(2) + " (" + (100 * dev).toFixed(2) + "%)\n<br />";
@@ -117,7 +132,7 @@ function methanol_show_results()
     document.write(txt);
 
     //actually the best way is using post instead of get
-    var urlReport = getURLParam("reportToUrl");
+    var urlReport = param.reportToUrl;
     if (urlReport){
       urlReport = urlReport.replace("%3F",'?');
       if (urlReport.indexOf('?') != -1){
@@ -143,7 +158,7 @@ function methanol_frame_message(event)
 function methanol_next_iter()
 {
     if (methanol_j == 0)
-        methanol_results[methanol_i] = new Array(methanol_m_with_skip);
+        methanol_results[methanol_i] = new Array(param.iter_with_skipped);
 
     var frame = document.getElementById("frame");
     frame.src = "";
@@ -155,7 +170,7 @@ function methanol_builtin_next_timeout(start, end)
     var rst = end - start;
     methanol_results[methanol_i][methanol_j] = rst;
     ++methanol_j;
-    if (methanol_j == methanol_m_with_skip) {
+    if (methanol_j == param.iter_with_skipped) {
         ++methanol_i;
         methanol_j = 0;
     }
@@ -164,36 +179,6 @@ function methanol_builtin_next_timeout(start, end)
         return;
     }
     methanol_next_iter();
-}
-
-function getURLParam(name)
-{
-    if (methanol_url_params !== undefined)
-        return methanol_url_params[name];
-    methanol_url_params = {};
-    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,
-                                    function(m, key, value) { methanol_url_params[key] = value; });
-    return methanol_url_params[name];
-}
-
-function setOverrides(iterationsParam, skipParam)
-{
-    var iterations = new Number(iterationsParam);
-    if (iterations == iterationsParam)
-        methanol_override_number_of_iteration = iterations;
-
-    if (iterations <= 2) {
-        methanol_override_number_of_skipped = 0;
-        return;
-    }
-
-    var skip = new Number(skipParam);
-    if (skip == skipParam) {
-        skip_final = skip + (skip % 2); // Need to be a multiply of 2.
-        if (skip_final >= iterations)
-            skip_final -= skip_final - iterations + 2;
-        methanol_override_number_of_skipped = skip_final;
-    }
 }
 
 function syncronisedStart()
@@ -214,19 +199,14 @@ function syncronisedStart()
 
 function normalStart()
 {
-    var iterations = getURLParam("iter");
-    var skip = getURLParam("skipped");
-    if (iterations !== undefined || skip !== undefined)
-        setOverrides(iterations, skip);
-
-    if (setup())
-        methanol_next_iter();
+    methanol_next_iter();
 }
 
 function methanol_fire()
 {
-    var syncStart = getURLParam("syncStart");
-    if (syncStart)
+    param = new MethanolParameter();
+    param.setByUrl(location.href);
+    if (param.syncStart)
         syncronisedStart();
     else
         normalStart();

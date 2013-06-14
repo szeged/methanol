@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2012-2013 Arm Limited
+ Copyright (C) 2013 Arm Limited
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -28,40 +28,35 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>canvas drawBezier</title>
+    <title>canvas draw patterned rectangle</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
+        var img = Utils.loadImg("leaves.png");
+
         function redraw(ctx) {
-            for (var i = 0; i < 10; i++) {
-                if (i % 2 == 0) {
-                    ctx.fillStyle = 'rgba(255, 0, 0, 0.25)';
-                } else if (i % 3 == 0) {
-                    ctx.fillStyle = 'rgba(0, 0, 255, 0.25)';
-                } else {
-                    ctx.fillStyle = 'rgba(0, 255, 0, 0.25)';
-                }
-
-                var s = 100;
-                var dx = Utils.getRandom(800);
-                var dy = Utils.getRandom(600);
-
-                ctx.beginPath();
-                var x = Math.sin(0);
-                var y = Math.cos(0);
-                var dig = Math.PI / 15 * 11;
-
-                ctx.moveTo(dx, dy);
-                for (var j = 0; j < 60; j++) {
-                    var x = Math.sin(j * dig);
-                    var y = Math.cos(j * dig);
-                    ctx.bezierCurveTo(dx + x * s, dy + y * s - 100, dx + x * s + 100, dy + y * s, dx + x * s, dy + y * s);
-                }
-                ctx.closePath();
-                ctx.fill();
-                ctx.stroke();
+            for (var i = 0; i < 400; i++) {
+                var width = Utils.getRandom(10, 100);
+                var height = Utils.getRandom(10, 100);
+                var x = Utils.getRandom(800);
+                var y = Utils.getRandom(600);
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.fillRect(0, 0, width, height);
+                ctx.restore();
             }
         }
-        var test = new MethanolCanvas2DTest(redraw);
+        
+        function setPattern(ctx, img) {
+            var ptrn = ctx.createPattern(img, "repeat");
+            ctx.fillStyle = ptrn;
+        }
+
+        function init(ctx) {
+            ctx.globalAlpha = 0.25;
+            setPattern(ctx, img);
+        }
+
+        var test = new MethanolCanvas2DTest(redraw, init);
     </script>
 </head>
 <body>

@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2012-2013 Arm Limited
+ Copyright (C) 2013 Arm Limited
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -28,37 +28,29 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>canvas drawBezier</title>
+    <title>canvas draw concave quadratic bezier</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
         function redraw(ctx) {
-            for (var i = 0; i < 10; i++) {
-                if (i % 2 == 0) {
-                    ctx.fillStyle = 'rgba(255, 0, 0, 0.25)';
-                } else if (i % 3 == 0) {
-                    ctx.fillStyle = 'rgba(0, 0, 255, 0.25)';
-                } else {
-                    ctx.fillStyle = 'rgba(0, 255, 0, 0.25)';
-                }
-
-                var s = 100;
-                var dx = Utils.getRandom(800);
-                var dy = Utils.getRandom(600);
+            ctx.globalAlpha = 0.25;
+            for (var i = 0; i < 300; i++) {
+                var x = Utils.getRandom(800);
+                var y = Utils.getRandom(600);
+                var dx1 = Utils.getRandom(-100, 100);
+                var dy1 = Utils.getRandom(-100, 100);
+                var dx2 = Utils.getRandom(-100, 100);
+                var dy2 = Utils.getRandom(-100, 100);
+                var dx3 = dx2 / 2 + Math.random() * (dx2 / 2 - dx1);
+                var dy3 = dy2 / 2 + Math.random() * (dy2 / 2 - dy1);
 
                 ctx.beginPath();
-                var x = Math.sin(0);
-                var y = Math.cos(0);
-                var dig = Math.PI / 15 * 11;
-
-                ctx.moveTo(dx, dy);
-                for (var j = 0; j < 60; j++) {
-                    var x = Math.sin(j * dig);
-                    var y = Math.cos(j * dig);
-                    ctx.bezierCurveTo(dx + x * s, dy + y * s - 100, dx + x * s + 100, dy + y * s, dx + x * s, dy + y * s);
-                }
+                ctx.moveTo(x, y);
+                ctx.quadraticCurveTo(x + dx1, y + dy1, x + dx2, y + dy2);
+                ctx.quadraticCurveTo(x + dx3, y + dy3, x, y);
                 ctx.closePath();
+
+                ctx.fillStyle = Utils.getRandomColor();
                 ctx.fill();
-                ctx.stroke();
             }
         }
         var test = new MethanolCanvas2DTest(redraw);
