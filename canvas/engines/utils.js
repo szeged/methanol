@@ -52,6 +52,15 @@ var Utils = {
             default: return 0;
         }
     },
+    loadImg: function (src) {
+        var img = document.createElement("img");
+        img.src = src;
+        return img;
+    },
+    getRandomColor: function () {
+        var color = "#" + ((Math.random() * (1 << 24)) | 0).toString(16);
+        return color;
+    },
 };
 
 function MethanolCanvas2DTest(redraw, initDraw) {
