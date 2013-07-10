@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2012-2013 ARM Limited
+ Copyright (C) 2013 ARM Limited
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -28,38 +28,39 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>canvas drawline</title>
+    <title>canvas draw gradient rectangle</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
         function redraw(ctx) {
-            var x = 0,
-                y = 0;
-            for (var i = 0; i < 100; i++) {
-                x = Utils.getRandom(800);
-                y = Utils.getRandom(600);
-                if (i % 2 == 0) {
-                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-                    ctx.lineWidth = 4;
-                    ctx.lineJoin = 'miter';
-                } else if (i % 3 == 0) {
-                    ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
-                    ctx.lineWidth = 8;
-                    ctx.lineJoin = 'round';
-                } else {
-                    ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
-                    ctx.lineWidth = 16;
-                    ctx.lineJoin = 'bevel';
+            for (var i = 0; i < 400; i++) {
+                var width = Utils.getRandom(10, 100);
+                var height = Utils.getRandom(10, 100);
+                var x = Utils.getRandom(800);
+                var y = Utils.getRandom(600);
+                var gradient;
+                switch (i & 1) {
+                    case 0:
+                        gradient = ctx.createLinearGradient(x, y, x, y + height);
+                        break;
+                    default:
+                        gradient = ctx.createLinearGradient(x, y, x + width, y);
+                        break;
                 }
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 80, y + 60);
-                ctx.lineTo(x, y + 120);
-                ctx.lineTo(x, y);
-                ctx.closePath();
-                ctx.stroke();
+                gradient.addColorStop(0, Utils.getRandomColor());
+                gradient.addColorStop(0.25, Utils.getRandomColor());
+                gradient.addColorStop(0.5, Utils.getRandomColor());
+                gradient.addColorStop(0.75, Utils.getRandomColor());
+                gradient.addColorStop(1, Utils.getRandomColor());
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x, y, width, height);
             }
         }
-        var test = new MethanolCanvas2DTest(redraw);
+
+        function init(ctx) {
+            ctx.globalAlpha = 0.25;
+        }
+
+        var test = new MethanolCanvas2DTest(redraw, init);
     </script>
 </head>
 <body>
