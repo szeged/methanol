@@ -1,0 +1,80 @@
+<!--
+ Copyright (C) 2013 ARM Limited
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY UNIVERSITY OF SZEGED AND CONTRIBUTORS
+ ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL UNIVERSITY OF
+ SZEGED OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>canvas: lissajous filled with grad</title>
+    <script type="text/javascript" src="../engines/utils.js"></script>
+    <script>
+        var circle_radius = 20;
+        var delta_angle = 0.5;
+        var max_angle = 360;
+        var factor = 1;
+
+        var A = 200;
+        var B = 2;
+        var C = 100;
+        var D = 5;
+
+        function init(ctx) {
+            ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
+            ctx.globalAlpha = 0.25;
+            A = ctx.canvas.width * 0.5 - circle_radius;
+            C = ctx.canvas.height * 0.5 - circle_radius;
+        }
+
+        function redraw(ctx) {
+            var x_center = 0;
+            var y_center = 0;
+            var angle = 0;
+            var gradient;
+
+            for (angle; angle < max_angle; angle += delta_angle) {
+                x_center = A * Math.sin(B * angle * Math.PI / 180);
+                y_center = C * Math.cos(D * angle * Math.PI / 180);
+
+                gradient = ctx.createLinearGradient(x_center, y_center,
+                                                x_center + circle_radius,
+                                                y_center + circle_radius);
+                gradient.addColorStop(0, Utils.getRandomColor());
+                gradient.addColorStop(0.5, Utils.getRandomColor());
+                gradient.addColorStop(1, Utils.getRandomColor());
+                ctx.fillStyle = gradient;
+
+                ctx.beginPath();
+                ctx.arc(x_center, y_center, circle_radius, 0, Math.PI * 2, true);
+                ctx.fill();
+            }
+        }
+
+        var test = new MethanolCanvas2DTest(redraw, init);
+    </script>
+</head>
+<body>
+</body>
+</html>
