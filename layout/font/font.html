@@ -1,0 +1,153 @@
+﻿<!--
+ Copyright (C) 2013 ARM Limited
+ All rights reserved.
+
+ Redistribution and use in source and binary forms, with or without
+ modification, are permitted provided that the following conditions
+ are met:
+ 1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+
+ THIS SOFTWARE IS PROVIDED BY UNIVERSITY OF SZEGED AND CONTRIBUTORS
+ ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL UNIVERSITY OF
+ SZEGED OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>font display</title>
+    <script type="text/javascript">
+        window.requestAnimFrame = (function () {
+            return window.requestAnimationFrame ||
+                   window.webkitRequestAnimationFrame ||
+                   window.mozRequestAnimationFrame ||
+                   window.oRequestAnimationFrame ||
+                   window.msRequestAnimationFrame ||
+                   function (callback, element) {
+                       return window.setTimeout(callback, 1000 / 60);
+                   };
+        })();
+
+        window.cancelRequestAnimFrame = (function () {
+            return window.cancelCancelRequestAnimationFrame ||
+                   window.webkitCancelRequestAnimationFrame ||
+                   window.mozCancelRequestAnimationFrame ||
+                   window.oCancelRequestAnimationFrame ||
+                   window.msCancelRequestAnimationFrame ||
+                   window.clearTimeout;
+        })();
+
+        function MethanolTest(redraw_fun, initDraw) {
+            var frameCount = 0;
+            var startTime = Date.now();
+            var redraw = typeof (redraw_fun) == "function" ? redraw_fun : function () { };
+            var drawInit = typeof (initDraw) == "function" ? initDraw : function () { };
+            function animationFrameCallback() {
+                frameCount++;
+                if (frameCount > 50) {
+                    var message = {
+                        start: startTime,
+                        end: Date.now(),
+                    };
+                    window.parent.postMessage(JSON.stringify(message), "*");
+                    return;
+                }
+
+                redraw();
+                window.requestAnimFrame(animationFrameCallback);
+            }
+
+            function startAnimation() {
+                drawInit();
+                window.requestAnimFrame(animationFrameCallback);
+            }
+
+            function init() {
+                if (window.addEventListener)
+                    window.addEventListener("load", startAnimation, false);
+                else
+                    window.attachEvent("onload", startAnimation);
+            }
+
+            init();
+        }
+
+        var zoom = 0.5
+        function setZoom() {
+            document.body.style.zoom = zoom;
+            zoom += 0.05;
+        }
+
+        var testImpl = new MethanolTest(setZoom);
+    </script>
+</head>
+
+<body>
+    abcdefghijklmnopqrstuvwxyz
+    <br />
+    ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    <br />
+    `1234567890-=
+    <br />
+    ~!@#$%^&*()_+
+    <br />
+    ⒈⒉⒊⒋⒌⒍⒎⒏⒐⒑⒒⒓⒔⒕⒖⒗⒘⒙⒚⒛
+    <br />
+    ⑴⑵⑶⑷⑸⑹⑺⑻⑼⑽⑾⑿⒀⒁⒂⒃⒄⒅⒆⒇
+    <br />
+    ㈠㈡㈢㈣㈤㈥㈦㈧㈨㈩
+    <br />
+    ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ
+    <br />
+    ！＂＃￥％＆＇（）＊＋，－．／
+    <br />
+    ０１２３４５６７８９：；＜＝＞？＠
+    <br />
+    ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ
+    <br />
+    ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ
+    <br />
+    ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜそぞた
+    <br />
+    だちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみ
+    <br />
+    むめもゃやゅゆょよらりるれろゎわゐゑをんァアィイゥウェエォオカガキギク
+    <br />
+    グケゲコゴサザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハ
+    <br />
+    バパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶ
+    <br />
+    啊阿埃挨哎唉哀皑癌蔼矮艾碍爱隘鞍氨安俺按暗岸胺案肮昂盎凹敖熬翱
+    <br />
+    袄傲奥懊澳芭捌扒叭吧笆八疤巴拔跋靶把耙坝霸罢爸白柏百摆佰败拜稗斑
+    <br />
+    班搬扳般颁板版扮拌伴瓣半办绊邦帮梆榜膀绑棒磅蚌镑傍谤苞胞包褒剥
+    <br />
+    薄雹保堡饱宝抱报暴豹鲍爆杯碑悲卑北辈背贝钡倍狈备惫焙被奔苯本笨
+    <br />
+    崩绷甭泵蹦迸逼鼻比鄙笔彼碧蓖蔽毕毙毖币庇痹闭敝弊必辟壁臂避陛鞭边
+    <br />
+    编贬扁便变卞辨辩辫遍标彪膘表鳖憋别瘪彬斌濒滨宾摈兵冰柄丙秉饼炳
+    <br />
+    病并玻菠播拨钵波博勃搏铂箔伯帛舶脖膊渤泊驳捕卜哺补埠不布步簿部
+    <br />
+    怖擦猜裁材才财睬踩采彩菜蔡餐参蚕残惭惨灿苍舱仓沧藏操糙槽曹草厕策
+    <br />
+    侧册测层蹭插叉茬茶查碴搽察岔差诧拆柴豺搀掺蝉馋谗缠铲产阐颤昌猖   
+    <br />
+</body>
+
+</html>
