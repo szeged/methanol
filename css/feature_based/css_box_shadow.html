@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2012 ARM Inc.
+ Copyright (C) 2012-2013 ARM Limited
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -11,63 +11,63 @@
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
- THIS SOFTWARE IS PROVIDED BY UNIVERSITY OF SZEGED ``AS IS'' AND ANY
- EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL UNIVERSITY OF SZEGED OR
- CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ THIS SOFTWARE IS PROVIDED BY UNIVERSITY OF SZEGED AND CONTRIBUTORS
+ ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL UNIVERSITY OF
+ SZEGED OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
  OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<script src="../../intoxicate.js"></script>
 <html lang="en">
-    
-    <head>
-        <meta charset=utf-8 />
-        <title>box shadow</title>
-        <script type="text/javascript">
-            // Create 40 tables with shadow
-            function CreateTabs() {
-                for (var i = 0; i < 40; i++) {
-                    var createTab = document.createElement("table");
-                    createTab.style.borderSpacing = "10px";
-                    createTab.style.width = "20%";
-                    createTab.style.height = "10%";
-                    createTab.style.float = "left";
-                    createTab.style.margin = "10px";
-                    createTab.style.webkitBoxShadow = "10px 10px 10px gray";
+<head>
+    <meta charset="utf-8" />
+    <title>box shadow</title>
+    <script type="text/javascript" src="../engines/utils.js"></script>
+    <script type="text/javascript">
+        // Create 40 tables with shadow
+        function CreateTabs() {
+            for (var i = 0; i < 40; i++) {
+                var createTab = document.createElement("table");
+                createTab.style.borderSpacing = "10px";
+                createTab.style.width = "20%";
+                createTab.style.height = "10%";
+                createTab.style.float = "left";
+                createTab.style.margin = "10px";
+                createTab.style.webkitBoxShadow = "10px 10px 10px gray";
 
-                    var createTd1 = document.createElement('td');
-                    createTd1.style.backgroundColor = "#ffaa00";
-                    createTd1.style.webkitBoxShadow = "5px 5px 5px gray";
-                    createTab.appendChild(createTd1);
+                var createTd1 = document.createElement('td');
+                createTd1.style.backgroundColor = "#ffaa00";
+                createTd1.style.webkitBoxShadow = "5px 5px 5px gray";
+                createTab.appendChild(createTd1);
 
-                    var createTd2 = document.createElement('td');
-                    createTd2.style.backgroundColor = "#ff00aa";
-                    createTd2.style.webkitBoxShadow = "10px 10px 10px gray";
-                    createTab.appendChild(createTd2);
+                var createTd2 = document.createElement('td');
+                createTd2.style.backgroundColor = "#ff00aa";
+                createTd2.style.webkitBoxShadow = "10px 10px 10px gray";
+                createTab.appendChild(createTd2);
 
-                    var createTd3 = document.createElement('td');
-                    createTd3.style.backgroundColor = "#aaff00";
-                    createTd3.style.webkitBoxShadow = "5px 5px 5px gray";
-                    createTab.appendChild(createTd3);
+                var createTd3 = document.createElement('td');
+                createTd3.style.backgroundColor = "#aaff00";
+                createTd3.style.webkitBoxShadow = "5px 5px 5px gray";
+                createTab.appendChild(createTd3);
 
-                    var createTd4 = document.createElement('td');
-                    createTd4.style.backgroundColor = "#00aaff";
-                    createTd4.style.webkitBoxShadow = "10px 10px 10px gray";
-                    createTab.appendChild(createTd4);
+                var createTd4 = document.createElement('td');
+                createTd4.style.backgroundColor = "#00aaff";
+                createTd4.style.webkitBoxShadow = "10px 10px 10px gray";
+                createTab.appendChild(createTd4);
 
-                    document.body.appendChild(createTab);
-                }
+                document.body.appendChild(createTab);
             }
-        </script>
-    </head>
-    
-    <body onload="CreateTabs();"></body>
+        }
 
+        var test = new CSSEffectTest(CreateTabs);
+    </script>
+</head>
+<body>
+</body>
 </html>
