@@ -32,7 +32,6 @@
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
         var circle_radius = 40;
-        var angle = 0;
         var delta_angle = 4;
         var max_angle = 360;
         var Constant = 200;
@@ -52,8 +51,9 @@
             var x_center = 0;
             var y_center = 0;
             var radius = 0;
+            var angle = 0;
 
-            for (angle = 0; angle < max_angle; angle += delta_angle) {
+            for (angle; angle < max_angle; angle += delta_angle) {
                 sine = Math.sin(factor * angle * Math.PI / 180);
                 cosine = Math.cos(factor * angle * Math.PI / 180);
                 radius = Constant * sine * sine / cosine;

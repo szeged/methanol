@@ -31,23 +31,21 @@
     <title>canvas drawline stroke pattern</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
-        var pat;
         function init(ctx) {
-        }
-        function redraw(ctx) {
             ctx.globalAlpha = 0.25;
             ctx.lineWidth = 15;
-            pat = ctx.createPattern(Utils.loadImg('sky.png'), 'repeat');
-            var x = 0, y = 0;
+            ctx.strokeStyle = ctx.createPattern(Utils.loadImg('sky.png'), 'repeat');
+        }
 
+        function redraw(ctx) {
             for (var i = 0; i < 100; i++) {
-                ctx.strokeStyle = pat;
                 ctx.beginPath();
                 ctx.moveTo(Utils.getRandom(ctx.canvas.width), Utils.getRandom(ctx.canvas.height));
                 ctx.lineTo(Utils.getRandom(ctx.canvas.width), Utils.getRandom(ctx.canvas.height));
                 ctx.stroke();
             }
         }
+
         var test = new MethanolCanvas2DTest(redraw, init);
     </script>
 </head>

@@ -34,8 +34,10 @@
         function init(ctx) {
             ctx.globalAlpha = 0.25;
         }
+
         function redraw(ctx) {
-            var x = 0, y = 0;
+            var x = 0;
+            var y = 0;
             ctx.lineWidth = 15;
 
             for (var i = 0; i < 100; i++) {
@@ -61,6 +63,7 @@
                 ctx.stroke();
             }
         }
+
         var test = new MethanolCanvas2DTest(redraw, init);
     </script>
 </head>

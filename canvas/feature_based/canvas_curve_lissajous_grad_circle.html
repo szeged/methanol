@@ -32,7 +32,6 @@
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
         var circle_radius = 20;
-        var angle = 0;
         var delta_angle = 0.5;
         var max_angle = 360;
         var factor = 1;
@@ -52,9 +51,10 @@
         function redraw(ctx) {
             var x_center = 0;
             var y_center = 0;
+            var angle = 0;
             var gradient;
 
-            for (angle = 0; angle < max_angle; angle += delta_angle) {
+            for (angle; angle < max_angle; angle += delta_angle) {
                 x_center = A * Math.sin(B * angle * Math.PI / 180);
                 y_center = C * Math.cos(D * angle * Math.PI / 180);
 

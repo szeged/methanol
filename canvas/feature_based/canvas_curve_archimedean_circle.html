@@ -34,17 +34,17 @@
         var circle_radius = 40;
         var delta_angle = 1;
         var max_angle = 720;
-        var Constant = 0;
+        var distance_per_angle = 0;
 
         function init(ctx) {
             ctx.globalAlpha = 0.25;
             ctx.translate(ctx.canvas.width / 2, ctx.canvas.height / 2);
-            Constant = (Math.min(ctx.canvas.width / 2, ctx.canvas.height / 2) - circle_radius) / max_angle;
+            distance_per_angle = (Math.min(ctx.canvas.width / 2, ctx.canvas.height / 2) - circle_radius) / max_angle;
         }
 
         function redraw(ctx) {
             for (var angle = 0; angle < max_angle; angle += delta_angle) {
-                var arch_radius = Constant * angle;
+                var arch_radius = distance_per_angle * angle;
                 var x_center = arch_radius * Math.cos(angle * Math.PI / 180);
                 var y_center = arch_radius * Math.sin(angle * Math.PI / 180);
                 ctx.fillStyle = Utils.getRandomColor();

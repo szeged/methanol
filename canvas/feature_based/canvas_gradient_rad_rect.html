@@ -31,15 +31,19 @@
     <title>canvas draw gradient rectangle</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
-        var x0 = 0, y0 = 0;
-        var x1 = 0, y1 = 0;
-        var r0 = 0, r1 = 0;
-
         function init(ctx) {
             ctx.globalAlpha = 0.25;
         }
+
         function redraw(ctx) {
-            for (var i = 0; i < 10; i++) {
+            var x0;
+            var y0;
+            var x1;
+            var y1;
+            var r0;
+            var r1;
+
+            for (var i = 0; i < 100; i++) {
                 var gradient;
                 x0 = Utils.getRandom(ctx.canvas.width);
                 y0 = Utils.getRandom(ctx.canvas.height);
@@ -62,6 +66,7 @@
                 ctx.fillRect(x, y, width, height);
             }
         }
+
         var test = new MethanolCanvas2DTest(redraw, init);
     </script>
 </head>

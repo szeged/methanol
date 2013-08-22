@@ -31,18 +31,20 @@
     <title>canvas drawline stroke</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
-        var lin_grad;
+
         function init(ctx) {
+            var line_gradient;
             ctx.lineWidth = 5;
-            lin_grad = ctx.createLinearGradient(ctx.canvas.width * 0.2, ctx.canvas.height * 0.2, ctx.canvas.width * 0.8, ctx.canvas.height * 0.8);
-            lin_grad.addColorStop(0, 'rgba(0, 0, 255, 1.0)');
-            lin_grad.addColorStop(Utils.getRandom(1000) * 0.001, Utils.getRandomColor());
-            lin_grad.addColorStop(1, 'rgba(255, 0, 0, 1.0)');
-            ctx.strokeStyle = lin_grad;
+            line_gradient = ctx.createLinearGradient(ctx.canvas.width * 0.2, ctx.canvas.height * 0.2, ctx.canvas.width * 0.8, ctx.canvas.height * 0.8);
+            line_gradient.addColorStop(0, 'rgba(0, 0, 255, 1.0)');
+            line_gradient.addColorStop(Utils.getRandom(1000) * 0.001, Utils.getRandomColor());
+            line_gradient.addColorStop(1, 'rgba(255, 0, 0, 1.0)');
+            ctx.strokeStyle = line_gradient;
         }
+
         function redraw(ctx) {
-            var x = 0,
-                y = 0;
+            var x;
+            var y;
             for (var i = 0; i < 100; i++) {
                 x = Utils.getRandom(ctx.canvas.width);
                 y = Utils.getRandom(ctx.canvas.height);
@@ -54,6 +56,7 @@
                 ctx.stroke();
             }
         }
+
         var test = new MethanolCanvas2DTest(redraw, init);
     </script>
 </head>

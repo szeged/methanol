@@ -31,22 +31,21 @@
     <title>canvas drawline stroke grad</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
-        var patt_sky;
-        var patt_pic;
-        var lin_grad;
         function redraw(ctx) {
-            var x = 0, y = 0;
+            var x;
+            var y;
             ctx.lineWidth = 15;
 
             for (var i = 0; i < 100; i++) {
-                lin_grad = ctx.createLinearGradient(
+                var line_gradient;
+                line_gradient = ctx.createLinearGradient(
                     Utils.getRandom(ctx.canvas.width), Utils.getRandom(ctx.canvas.height),
                     Utils.getRandom(ctx.canvas.width), Utils.getRandom(ctx.canvas.height));
-                lin_grad.addColorStop(0, Utils.getRandomColor());
-                lin_grad.addColorStop(0.25, Utils.getRandomColor());
-                lin_grad.addColorStop(1, Utils.getRandomColor());
+                line_gradient.addColorStop(0, Utils.getRandomColor());
+                line_gradient.addColorStop(0.25, Utils.getRandomColor());
+                line_gradient.addColorStop(1, Utils.getRandomColor());
 
-                ctx.strokeStyle = lin_grad;
+                ctx.strokeStyle = line_gradient;
 
                 x = Utils.getRandom(ctx.canvas.width);
                 y = Utils.getRandom(ctx.canvas.height);
@@ -56,9 +55,11 @@
                 ctx.stroke();
             }
         }
+
         function init(ctx) {
             ctx.globalAlpha = 0.25;
         }
+
         var test = new MethanolCanvas2DTest(redraw, init);
     </script>
 </head>
