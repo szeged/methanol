@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2012-2013 ARM Limited
+ Copyright (C) 2013 ARM Limited
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -28,37 +28,26 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>canvas drawline</title>
+    <title>canvas draw image alone</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
+        var img = Utils.loadImg("pic.png");
+        var image_size = { width: 0, height: 0 };
+
+
+        img.onload = function () {
+            image_size.width = this.width;
+            image_size.height = this.height;
+        }
+
         function redraw(ctx) {
-            var x;
-            var y;
-            for (var i = 0; i < 100; i++) {
-                x = Utils.getRandom(800);
-                y = Utils.getRandom(600);
-                if (i % 2 == 0) {
-                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-                    ctx.lineWidth = 4;
-                    ctx.lineJoin = 'miter';
-                } else if (i % 3 == 0) {
-                    ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
-                    ctx.lineWidth = 8;
-                    ctx.lineJoin = 'round';
-                } else {
-                    ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
-                    ctx.lineWidth = 16;
-                    ctx.lineJoin = 'bevel';
-                }
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 80, y + 60);
-                ctx.lineTo(x, y + 120);
-                ctx.lineTo(x, y);
-                ctx.closePath();
-                ctx.stroke();
+            for (var i = 0; i < 300; i++) {
+                ctx.drawImage(img,
+                    Utils.getRandom(ctx.canvas.width - image_size.width), Utils.getRandom(ctx.canvas.height - image_size.height),
+                    image_size.width, image_size.height);
             }
         }
+
         var test = new MethanolCanvas2DTest(redraw);
     </script>
 </head>

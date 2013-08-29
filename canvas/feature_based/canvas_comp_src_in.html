@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2012-2013 ARM Limited
+ Copyright (C) 2013 ARM Limited
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -28,37 +28,24 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>canvas drawline</title>
+    <title>canvas compositing: source-in</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
         function redraw(ctx) {
-            var x;
-            var y;
-            for (var i = 0; i < 100; i++) {
-                x = Utils.getRandom(800);
-                y = Utils.getRandom(600);
-                if (i % 2 == 0) {
-                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-                    ctx.lineWidth = 4;
-                    ctx.lineJoin = 'miter';
-                } else if (i % 3 == 0) {
-                    ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
-                    ctx.lineWidth = 8;
-                    ctx.lineJoin = 'round';
-                } else {
-                    ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
-                    ctx.lineWidth = 16;
-                    ctx.lineJoin = 'bevel';
-                }
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(x + 80, y + 60);
-                ctx.lineTo(x, y + 120);
-                ctx.lineTo(x, y);
-                ctx.closePath();
-                ctx.stroke();
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            for (var i = 0; i < 20; i++) {
+                ctx.globalCompositeOperation = "source-over";
+                ctx.fillStyle = Utils.getRandomColor();
+                ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+                ctx.globalCompositeOperation = "source-in";
+                ctx.fillStyle = Utils.getRandomColor();
+                ctx.fillRect(Utils.getRandom(ctx.canvas.width), Utils.getRandom(ctx.canvas.height),
+                    Utils.getRandom(ctx.canvas.width * 0.1, ctx.canvas.width * 0.5),
+                    Utils.getRandom(ctx.canvas.height * 0.1, ctx.canvas.height * 0.5));
             }
         }
+
         var test = new MethanolCanvas2DTest(redraw);
     </script>
 </head>

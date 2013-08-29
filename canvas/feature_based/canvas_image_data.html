@@ -32,7 +32,9 @@
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
         function drawRing(imgData, outer, inner, blur) {
-            var x, y;
+            var x;
+            var y;
+            
             for (x = 0; x < 600; x++) {
                 for (y = 0; y < 600; y++) {
                     var d = Math.sqrt((x - 300) * (x - 300) + (y - 300) * (y - 300));

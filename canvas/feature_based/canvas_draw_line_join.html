@@ -1,5 +1,5 @@
 <!--
- Copyright (C) 2012-2013 ARM Limited
+ Copyright (C) 2013 ARM Limited
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -28,38 +28,43 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>canvas drawline</title>
+    <title>canvas draw line join</title>
     <script type="text/javascript" src="../engines/utils.js"></script>
     <script>
+        function init(ctx) {
+            ctx.globalAlpha = 0.25;
+        }
+
         function redraw(ctx) {
-            var x;
-            var y;
+            var x = 0;
+            var y = 0;
+            ctx.lineWidth = 15;
+
             for (var i = 0; i < 100; i++) {
-                x = Utils.getRandom(800);
-                y = Utils.getRandom(600);
-                if (i % 2 == 0) {
-                    ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
-                    ctx.lineWidth = 4;
-                    ctx.lineJoin = 'miter';
-                } else if (i % 3 == 0) {
-                    ctx.strokeStyle = 'rgba(0, 0, 255, 0.5)';
-                    ctx.lineWidth = 8;
-                    ctx.lineJoin = 'round';
-                } else {
-                    ctx.strokeStyle = 'rgba(0, 255, 0, 0.5)';
-                    ctx.lineWidth = 16;
-                    ctx.lineJoin = 'bevel';
+                x = Utils.getRandom(ctx.canvas.width);
+                y = Utils.getRandom(ctx.canvas.height);
+                ctx.strokeStyle = Utils.getRandomColor();
+
+                switch (i % 3) {
+                    case 0:
+                        ctx.lineJoin = 'miter';
+                        break;
+                    case 1:
+                        ctx.lineJoin = 'round';
+                        break;
+                    case 2:
+                        ctx.lineJoin = 'bevel';
+                        break;
                 }
                 ctx.beginPath();
                 ctx.moveTo(x, y);
-                ctx.lineTo(x + 80, y + 60);
-                ctx.lineTo(x, y + 120);
-                ctx.lineTo(x, y);
-                ctx.closePath();
+                ctx.lineTo(x + Utils.getRandom(ctx.canvas.width * 0.5), y + Utils.getRandom(ctx.canvas.height * 0.5));
+                ctx.lineTo(x, y + Utils.getRandom(ctx.canvas.height * 0.5));
                 ctx.stroke();
             }
         }
-        var test = new MethanolCanvas2DTest(redraw);
+
+        var test = new MethanolCanvas2DTest(redraw, init);
     </script>
 </head>
 <body>
